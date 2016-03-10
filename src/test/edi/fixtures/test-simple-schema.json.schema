@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "measurement": {
+      "edi_order": 1,
+      "edi_tag": "MEA",
+      "type": "object",
+      "required": true,
+      "properties": {
+        "foo": {
+          "edi_order": "1",
+          "edi_ref": "C5422",
+          "type": "object",
+          "properties": {
+            "foo_bar1": {
+              "edi_order": "1",
+              "edi_ref": "4301",
+              "type": "string"
+            },
+            "foo_bar2": {
+              "edi_order": "2",
+              "edi_ref": "4302",
+              "type": "string",
+              "required": true
+            },
+            "foo_bar3": {
+              "edi_order": "3",
+              "edi_ref": "4303",
+              "type": "string"
+            },
+            "foo_bar4": {
+              "edi_order": "4",
+              "edi_ref": "4304",
+              "type": "string"
+            }
+          }
+        },
+        "bar1": {
+          "edi_order": "2",
+          "edi_ref": "2122",
+          "type": "string"
+        },
+        "bar2": {
+          "edi_order": "3",
+          "edi_ref": "2122",
+          "type": "string",
+          "required": true
+        },
+        "bar3": {
+          "edi_order": "4",
+          "edi_ref": "2122",
+          "type": "string"
+        },
+        "bar4": {
+          "edi_order": "5",
+          "edi_ref": "2122",
+          "type": "string"
+        }
+      }
+    },
+
+    "array_of_segments": {
+      "edi_order": 2,
+      "type": "array",
+      "maxItems": 2,
+      "title": "Foos",
+      "items": {
+        "edi_order": 1,
+        "edi_tag": "FOO",
+        "title": "Date",
+        "type": "object",
+        "properties": {
+          "date_value": {
+            "edi_order": 1,
+            "edi_ref": "2005",
+            "type": "string"
+          }
+        }
+      }
+    },
+
+    "array_of_objects": {
+      "edi_order": 2,
+      "type": "array",
+      "maxItems": 9,
+      "items": {
+        "title": "Date Time",
+        "type": "object",
+        "properties": {
+          "my_bar_seg": {
+            "edi_order": 1,
+            "edi_tag": "BAR",
+            "type": "object",
+            "properties": {
+              "bar_val": {
+                "edi_order": 1,
+                "edi_ref": 9212,
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
