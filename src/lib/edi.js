@@ -3,7 +3,7 @@ let helpers = require('./edi-helpers.js');
 let Validator = require('jsonschema').Validator;
 let {JsonSchemaValidationError} = require("./edi-errors.js");
 
-function ediItemFromConfig(name, config, level) {
+function ediItemFromConfig(name, config, level, parent) {
 
   if(config.edi_tag) {
     return new EdiSegment(name, config, level);
@@ -18,7 +18,7 @@ function ediItemFromConfig(name, config, level) {
   }
 
   if(config.edi_ref) {
-    return new EdiDataComponent(name, config);
+    return new EdiDataComponent(name, config, parent);
   }
 
   throw new Error("Unknown EDI type: \n" + JSON.stringify(config));
@@ -62,19 +62,24 @@ function getListOfEdiItems(data, list, config) {
 
 class EdiBase {
   constructor(name, config) {
+    if(!config) {
+      throw new Error("EdiBase: Config is required");
+    }
+
     this.name = name;
     this.config = {
       __type: this.constructor.name,
       edi_order: config.edi_order,
       edi_ref: config.edi_ref,
-      required: config.required
+      required: config.required,
+      dataType: config.type
     };
   }
 
   parseConfig(properties, level) {
     let items = [];
     for(let name in properties) {
-      items.push(ediItemFromConfig(name, properties[name], level));
+      items.push(ediItemFromConfig(name, properties[name], level, this));
     }
 
     //reverse looping to ensure can omit is only up until last
@@ -105,14 +110,45 @@ class EdiSegment extends EdiBase {
 
   toEdi(data, config) {
     if(data) {
-      config.totalSegments ++;
-      var items = getListOfEdiItems(data, this.items, config);
-      items.unshift(this.config.tag);
+      //if this is an "edi_ref" then this is a "DataElement" segment containing "DataComponents" so
+      // join using the "dataComponentSeparator" otherwise use the "dataElementSeparator"
+      var joiner = this.config.edi_ref ? config.dataComponentSeparator : config.dataElementSeparator;
 
-      return items.join(config.dataElementSeparator) + config.segmentSeparator;
+      if(this.config.tag === "UNH") {
+        //Reset the total segments when a UNH is picked up
+        config.totalSegments = 1;
+
+        //Increase the total messages for the entire transfer
+        config.totalMessages ++;
+      } else {
+        config.totalSegments ++;
+      }
+
+      var items = getListOfEdiItems(data, this.items, config);
+
+      return this.config.tag + config.dataElementSeparator + items.join(joiner) + config.segmentSeparator;
     } else {
       return null;
     }
+  }
+
+  parse(reader) {
+    if(reader.current() && reader.current().tag === this.config.tag) {
+      var ret = {};
+
+      for (var i = 0; i < this.items.length; i++) {
+        var val = this.items[i].parse(reader);
+
+        if(!_.isUndefined(val)) {
+          ret[this.items[i].name] = val;
+        }
+      }
+
+      reader.next();
+      return ret;
+    }
+
+    return undefined;
   }
 }
 
@@ -120,6 +156,7 @@ class EdiSegmentGroup extends EdiBase {
   constructor(name, config, level) {
     super(name, config);
     this.config.level = level;
+    this.config.edi_ref = config.items.edi_ref;
     this.items = this.parseConfig(config.items.properties, level + 1);
 
     if(this.items.length > 0) {
@@ -152,7 +189,7 @@ class EdiSegmentGroup extends EdiBase {
           }
         } else {
           //This is an group where the main item is the captcha group and the children are DataElements / DataComponents
-          var seg = [this.config.groupTag];
+          var seg = [];
           config.totalSegments ++;
 
           for (let item of this.items) {
@@ -163,7 +200,11 @@ class EdiSegmentGroup extends EdiBase {
             }
           }
 
-          segs.push(seg.join(config.dataElementSeparator) + config.segmentSeparator);
+          //if this is an "edi_ref" then this is a "DataElement" containing "DataComponents" so
+          // join using the "dataComponentSeparator" otherwise use the "dataElementSeparator"
+          var joiner = this.config.edi_ref ? config.dataComponentSeparator : config.dataElementSeparator;
+
+          segs.push(this.config.groupTag + config.dataElementSeparator + seg.join(joiner) + config.segmentSeparator);
         }
       }
 
@@ -172,6 +213,32 @@ class EdiSegmentGroup extends EdiBase {
     } else {
       return null;
     }
+  }
+
+  parse(reader) {
+    var current, segs;
+
+    //continue in the captcha group until no more matches)
+    while(reader.current() && reader.current().tag === this.config.groupTag) {
+      segs = segs || [];
+      var val = {};
+
+      for (let i = 0; i < this.items.length; i++) {
+        var dVal = this.items[i].parse(reader);
+        if(dVal) {
+          val[this.items[i].name] = dVal;
+        }
+
+      }
+
+      if(!_.isEmpty(val)) {
+        segs.push(val);
+      } else {
+        reader.next();
+      }
+    }
+
+    return segs
   }
 }
 
@@ -187,11 +254,30 @@ class EdiDataElement extends EdiBase {
       return items.join(config.dataComponentSeparator)
     }
   }
+
+  parse(reader) {
+    var ret = {};
+    for(var i = 0; i < this.items.length; i++) {
+      var val = this.items[i].parse(reader);
+      if(!_.isUndefined(val)) {
+        ret[this.items[i].name] = val;
+      }
+    }
+
+    reader.nextDataElement();
+
+    if(!_.isEmpty(ret)) {
+      return ret;
+    } else {
+      return undefined;
+    }
+  }
 }
 
 class EdiDataComponent extends EdiBase {
-  constructor(name, config) {
+  constructor(name, config, parent) {
     super(name, config);
+    this.config.parentConfig = parent ? parent.config : {};
   }
 
   toEdi(data, config) {
@@ -203,6 +289,33 @@ class EdiDataComponent extends EdiBase {
     }
 
     return data;
+  }
+
+  parse(reader) {
+    var data = reader.nextDataComponent();
+
+    //if this parent is a segment and the segment is an DataElement
+    // then fetch next data element
+    // ie. FOO+1:2:3'  - Where 1,2,3 are data components
+    var parentConfig = this.config.parentConfig;
+    if(["EdiSegment", "EdiSegmentGroup"].indexOf(parentConfig.__type) >= 0 && !parentConfig.edi_ref) {
+      reader.nextDataElement();
+    }
+
+    if(!_.isEmpty(data)) {
+
+      switch(this.config.dataType) {
+        case "integer":
+        case "number":
+          return parseInt(data);
+        case "decimal":
+          return parseFloat(data);
+        default:
+          return data;
+      }
+    } else {
+      return undefined;
+    }
   }
 }
 
@@ -222,27 +335,38 @@ class Edi extends EdiBase {
     this.__validateData(value);
     config = this.__getConfig(config);
     config.totalSegments = 0;
+    config.totalMessages = 0;
 
     let edis = [];
 
     for(let item of this.ediSchemaItems) {
-      //Special case for UNT
+      //Special case for UNT + UNZ
       if(item.config.tag === "UNT") {
-        if(value[item.name]) {
-          value[item.name].numberOfSegmentsInMessage = config.totalSegments + 1;
-        } else {
-          //create the UNT if not exists and add 1 for this new item
-          value[item.name] = {
-            numberOfSegmentsInMessage: config.totalSegments + 1
-          }
-        }
+        value[item.name] = value[item.name] || {};
+        value[item.name].numberOfSegmentsInMessage = config.totalSegments + 1;
+      } else if(item.config.tag === "UNZ") {
+        value[item.name] = value[item.name] || {};
+        value[item.name].interchangeControlCount = config.totalMessages;
       }
-
 
       edis.push(item.toEdi(value[item.name], config));
     }
 
     return _.compact(edis).join("");
+  }
+
+  parse(reader) {
+    var current = reader.current();
+    var ret = {};
+
+    for(let item of this.ediSchemaItems) {
+      var val = item.parse(reader);
+      if(!_.isUndefined(val)) {
+        ret[item.name] = val;
+      }
+    }
+
+    return ret;
   }
 
   //privates
@@ -269,10 +393,101 @@ class Edi extends EdiBase {
   }
 }
 
+class EdiSegmentReader {
+
+  constructor(input, config) {
+    this.config = config;
+    this.segments = this.initSegments(input);
+  }
+
+  initSegments(input) {
+    let items = this.regexSplitter(input, this.config.segmentSeparator, this.config.releaseCharacter);
+    let segments = [];
+    for(var i = 0; i < items.length; i++) {
+      var dataElms = this.regexSplitter(items[i], this.config.dataElementSeparator, this.config.releaseCharacter);
+      var seg = {
+        tag: dataElms[0],
+        dataElements: [],
+        value: items[i]
+      };
+
+      for(var j = 1; j < dataElms.length; j++) {
+        var comps = this.regexSplitter(dataElms[j], this.config.dataComponentSeparator, this.config.releaseCharacter);
+
+        for(var k = 0; k < comps.length; k++) {
+          comps[k] = comps[k].replace(this.config.releaseCharacter + this.config.releaseCharacter, this.config.releaseCharacter, 'g');
+        }
+
+        seg.dataElements.push(comps);
+      }
+
+      segments.push(seg);
+    }
+
+    return segments;
+  }
+
+  regexSplitter(input, split, esc) {
+    var output = [];
+    var lastIndex = 0;
+
+    input.replace(new RegExp("\\" + split, "g"), function(val, index) {
+      var es = input.substring(index, index - esc.length);
+      var esAndPrev = input.substring(index, index - (esc.length * 2));
+
+      if(es !== esc || (esAndPrev === (esc + esc))) {
+        output.push(input.substring(lastIndex, index));                
+        lastIndex = index + split.length;
+      }
+    });
+
+    //get last input items on the stack
+    if(lastIndex < input.length) {
+      output.push(input.substring(lastIndex));
+    }
+
+    //cleanup escape characters and trim
+    for(var i = 0; i < output.length; i++) {
+      output[i] = output[i].replace(esc + split, split).trim();
+    }
+
+    return output;
+  }
+
+  current() {
+    return this.segments[0];
+  }
+
+  next() {
+    return this.segments.shift();
+  }
+
+  currentDataElement() {
+    var cur = this.current();
+    return cur ? this.current().dataElements[0] : undefined;
+  }
+
+  nextDataElement() {
+    var cur = this.current();
+    return cur ? this.current().dataElements.shift() : undefined;
+  }
+
+  currentDataComponent() {
+    var de = this.currentDataElement();
+    return de ? this.currentDataElement()[0] : undefined;
+  }
+
+  nextDataComponent() {
+    var de = this.currentDataElement();
+    return de ? this.currentDataElement().shift() : undefined;
+  }
+}
+
 module.exports = {
   Edi,
   EdiSegment,
   EdiSegmentGroup,
   EdiDataElement,
-  EdiDataComponent
+  EdiDataComponent,
+  EdiSegmentReader
 };

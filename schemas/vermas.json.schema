@@ -2,38 +2,40 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
   "properties": {
-    "messageHeader": {
+    "interchangeHeader": {
       "edi_order": 1,
+      "$ref": "#/definitions/UNB",
+      "required": true
+    },
+    "messageHeader": {
+      "edi_order": 2,
       "$ref": "#/definitions/UNH",
       "required": true
     },
     "beginningOfMessage": {
-      "edi_order": 2,
+      "edi_order": 3,
       "$ref": "#/definitions/BGM"
     },
     "datetime": {
-      "edi_order": 3,
-      "allOf": [
-        {
-          "properties": {
-            "functionCodeQualifier": {
-              "title": "Function Code Qualifier",
-              "edi_ref": "2005",
-              "edi_order": "1",
-              "description": "Code qualifying the function of a date, time or period. 137: Document issue date time.",
-              "type": "string",
-              "maxLength": 3,
-              "required": true
-            }
+      "edi_order": 4,
+      "allOf": [{
+        "properties": {
+          "functionCodeQualifier": {
+            "title": "Function Code Qualifier",
+            "edi_ref": "2005",
+            "edi_order": "1",
+            "description": "Code qualifying the function of a date, time or period. 137: Document issue date time.",
+            "type": "string",
+            "maxLength": 3,
+            "required": true
           }
-        },
-        {
-          "$ref": "#/definitions/DTM"
         }
-      ]
+      }, {
+        "$ref": "#/definitions/DTM"
+      }]
     },
     "references": {
-      "edi_order": 4,
+      "edi_order": 5,
       "type": "array",
       "description": "A group of segments to specify the document or message to which the current message relates, and related dates and times.",
       "maxItems": 9,
@@ -44,60 +46,54 @@
           "reference": {
             "edi_order": 1,
             "required": true,
-            "allOf": [
-              {
-                "properties": {
-                  "referenceCodeQualifier": {
-                    "title": "Reference Code Qualifier",
-                    "edi_ref": "1153",
-                    "edi_order": "1",
-                    "description": "Code qualifying a reference: [ (AAS) Transport contract document identifier, (ABE) Declarant's reference number, (ACW) Reference number to previous message, (AFB) Cargo manifest number, (AGO) Sender's reference to the original message, (MS) Message sender, (SI) SID (Shipper's identifying number for shipment)",
-                    "type": "string",
-                    "maxLength": 3,
-                    "required": true,
-                    "enum": [
-                      "AAS",
-                      "ABE",
-                      "ACW",
-                      "AFB",
-                      "AGO",
-                      "MS",
-                      "SI"
-                    ]
-                  }
+            "allOf": [{
+              "properties": {
+                "referenceCodeQualifier": {
+                  "title": "Reference Code Qualifier",
+                  "edi_ref": "1153",
+                  "edi_order": "1",
+                  "description": "Code qualifying a reference: [ (AAS) Transport contract document identifier, (ABE) Declarant's reference number, (ACW) Reference number to previous message, (AFB) Cargo manifest number, (AGO) Sender's reference to the original message, (MS) Message sender, (SI) SID (Shipper's identifying number for shipment)",
+                  "type": "string",
+                  "maxLength": 3,
+                  "required": true,
+                  "enum": [
+                    "AAS",
+                    "ABE",
+                    "ACW",
+                    "AFB",
+                    "AGO",
+                    "MS",
+                    "SI"
+                  ]
                 }
-              },
-              {
-                "$ref": "#/definitions/RFF"
               }
-            ]
+            }, {
+              "$ref": "#/definitions/RFF"
+            }]
           },
           "datetime": {
             "edi_order": 2,
-            "allOf": [
-              {
-                "properties": {
-                  "functionCodeQualifier": {
-                    "title": "Function Code Qualifier",
-                    "edi_ref": "2005",
-                    "edi_order": "1",
-                    "description": "Code qualifying the function of a date, time or period. 137: Document issue date time.",
-                    "type": "string",
-                    "maxLength": 3,
-                    "required": true
-                  }
+            "allOf": [{
+              "properties": {
+                "functionCodeQualifier": {
+                  "title": "Function Code Qualifier",
+                  "edi_ref": "2005",
+                  "edi_order": "1",
+                  "description": "Code qualifying the function of a date, time or period. 137: Document issue date time.",
+                  "type": "string",
+                  "maxLength": 3,
+                  "required": true
                 }
-              },
-              {
-                "$ref": "#/definitions/DTM"
               }
-            ]
+            }, {
+              "$ref": "#/definitions/DTM"
+            }]
           }
         }
       }
     },
     "parties": {
-      "edi_order": 5,
+      "edi_order": 6,
       "type": "array",
       "description": "A group of segments to identify a party for the entire message including the message sender and related contacts.",
       "maxItems": 9,
@@ -108,34 +104,31 @@
           "nameAndAddress": {
             "edi_order": 1,
             "required": true,
-            "allOf": [
-              {
-                "properties": {
-                  "partyFunctionCodeQualifier": {
-                    "title": "Party Function Code Qualifier",
-                    "edi_ref": "3035",
-                    "edi_order": "1",
-                    "description": "Code giving specific meaning to a party: [ (CF) Container operator/lessee, (CZ) Consignor, (DEI) Means of transport operator, (GF) Slot charter party, (PQ) Certifying party, (SPC) Party responsible to obtain SOLAS Verified Gross Mass, (TR) Terminal operator, (WPA) Weighting party ]",
-                    "type": "string",
-                    "maxLength": 3,
-                    "required": true,
-                    "enum": [
-                      "CF",
-                      "CZ",
-                      "DEI",
-                      "GF",
-                      "PQ",
-                      "SPC",
-                      "TR",
-                      "WPA"
-                    ]
-                  }
+            "allOf": [{
+              "properties": {
+                "partyFunctionCodeQualifier": {
+                  "title": "Party Function Code Qualifier",
+                  "edi_ref": "3035",
+                  "edi_order": "1",
+                  "description": "Code giving specific meaning to a party: [ (CF) Container operator/lessee, (CZ) Consignor, (DEI) Means of transport operator, (GF) Slot charter party, (PQ) Certifying party, (SPC) Party responsible to obtain SOLAS Verified Gross Mass, (TR) Terminal operator, (WPA) Weighting party ]",
+                  "type": "string",
+                  "maxLength": 3,
+                  "required": true,
+                  "enum": [
+                    "CF",
+                    "CZ",
+                    "DEI",
+                    "GF",
+                    "PQ",
+                    "SPC",
+                    "TR",
+                    "WPA"
+                  ]
                 }
-              },
-              {
-                "$ref": "#/definitions/NAD"
               }
-            ]
+            }, {
+              "$ref": "#/definitions/NAD"
+            }]
           },
           "contacts": {
             "edi_order": 2,
@@ -148,28 +141,25 @@
                 "details": {
                   "edi_order": 1,
                   "required": true,
-                  "allOf": [
-                    {
-                      "properties": {
-                        "contactFunctionCode": {
-                          "title": "Contact Function Code",
-                          "edi_ref": "3139",
-                          "edi_order": "1",
-                          "description": "Code specifying the function of a contact (e.g. department or person). [ (BN) Certification contact, (CW) Confirmed with, (MS) Message sender contact ]",
-                          "type": "string",
-                          "maxLength": 3,
-                          "enum": [
-                            "BN",
-                            "CW",
-                            "MS"
-                          ]
-                        }
+                  "allOf": [{
+                    "properties": {
+                      "contactFunctionCode": {
+                        "title": "Contact Function Code",
+                        "edi_ref": "3139",
+                        "edi_order": "1",
+                        "description": "Code specifying the function of a contact (e.g. department or person). [ (BN) Certification contact, (CW) Confirmed with, (MS) Message sender contact ]",
+                        "type": "string",
+                        "maxLength": 3,
+                        "enum": [
+                          "BN",
+                          "CW",
+                          "MS"
+                        ]
                       }
-                    },
-                    {
-                      "$ref": "#/definitions/CTA"
                     }
-                  ]
+                  }, {
+                    "$ref": "#/definitions/CTA"
+                  }]
                 },
                 "communicationChannels": {
                   "edi_order": 2,
@@ -188,7 +178,7 @@
       }
     },
     "equipmentDetails": {
-      "edi_order": 6,
+      "edi_order": 7,
       "type": "array",
       "description": "A group of segments containing information about one packed container.",
       "maxItems": 99999,
@@ -208,30 +198,27 @@
             "items": {
               "title": "Reference",
               "type": "object",
-              "allOf": [
-                {
-                  "properties": {
-                    "referenceCodeQualifier": {
-                      "title": "Reference Code Qualifier",
-                      "edi_ref": "1153",
-                      "edi_order": "1",
-                      "description": "Code qualifying a reference: [ (BM) Bill of lading number, (BN) Consignment identifier, carrier assigned, (SI) SID (Shipper's identifying number for shipment, (AOW) AOW (Submitter's VGM transaction reference) is mandatory. It is intended to provide an identifier for the VGM transaction that can be used to relate it to associated transportation documents, (FF) Consignment identifier, freight forwarder assigned [1460] Reference number assigned by the freight forwarder to identify a particular consignment]",
-                      "type": "string",
-                      "required": true,
-                      "enum": [
-                        "BM",
-                        "BN",
-                        "SI",
-                        "AOW",
-                        "FF"
-                      ]
-                    }
+              "allOf": [{
+                "properties": {
+                  "referenceCodeQualifier": {
+                    "title": "Reference Code Qualifier",
+                    "edi_ref": "1153",
+                    "edi_order": "1",
+                    "description": "Code qualifying a reference: [ (BM) Bill of lading number, (BN) Consignment identifier, carrier assigned, (SI) SID (Shipper's identifying number for shipment, (AOW) AOW (Submitter's VGM transaction reference) is mandatory. It is intended to provide an identifier for the VGM transaction that can be used to relate it to associated transportation documents, (FF) Consignment identifier, freight forwarder assigned [1460] Reference number assigned by the freight forwarder to identify a particular consignment]",
+                    "type": "string",
+                    "required": true,
+                    "enum": [
+                      "BM",
+                      "BN",
+                      "SI",
+                      "AOW",
+                      "FF"
+                    ]
                   }
-                },
-                {
-                  "$ref": "#/definitions/RFF"
                 }
-              ]
+              }, {
+                "$ref": "#/definitions/RFF"
+              }]
             }
           },
           "placeLocationIdentifications": {
@@ -268,34 +255,31 @@
                   "$ref": "#/definitions/MEA",
                   "required": true
                 },
-                "dateTimes": {
+                "datetimes": {
                   "edi_order": 2,
                   "type": "array",
                   "maxItems": 9,
                   "items": {
                     "title": "Date Time",
                     "type": "object",
-                    "allOf": [
-                      {
-                        "properties": {
-                          "functionCodeQualifier": {
-                            "title": "Function Code Qualifier",
-                            "edi_ref": "2005",
-                            "edi_order": "1",
-                            "description": "Code qualifying the function of a date, time or period.[(798) Weight ascertained - Date/Time when gross mass was obtained]",
-                            "type": "number",
-                            "enum": [
-                              "798"
-                            ],
-                            "default": "798",
-                            "required": true
-                          }
+                    "allOf": [{
+                      "properties": {
+                        "functionCodeQualifier": {
+                          "title": "Function Code Qualifier",
+                          "edi_ref": "2005",
+                          "edi_order": "1",
+                          "description": "Code qualifying the function of a date, time or period.[(798) Weight ascertained - Date/Time when gross mass was obtained]",
+                          "type": "number",
+                          "enum": [
+                            "798"
+                          ],
+                          "default": "798",
+                          "required": true
                         }
-                      },
-                      {
-                        "$ref": "#/definitions/DTM"
                       }
-                    ]
+                    }, {
+                      "$ref": "#/definitions/DTM"
+                    }]
                   }
                 }
               }
@@ -322,28 +306,25 @@
                   "items": {
                     "title": "Reference",
                     "type": "object",
-                    "allOf": [
-                      {
-                        "properties": {
-                          "referenceCodeQualifier": {
-                            "title": "Reference Code Qualifier",
-                            "edi_ref": "1153",
-                            "edi_order": "1",
-                            "description": "Code qualifying a reference: [ (VON) Voyage Number]",
-                            "type": "string",
-                            "maxLength": 3,
-                            "required": true,
-                            "enum": [
-                              "VON"
-                            ],
-                            "default": "VON"
-                          }
+                    "allOf": [{
+                      "properties": {
+                        "referenceCodeQualifier": {
+                          "title": "Reference Code Qualifier",
+                          "edi_ref": "1153",
+                          "edi_order": "1",
+                          "description": "Code qualifying a reference: [ (VON) Voyage Number]",
+                          "type": "string",
+                          "maxLength": 3,
+                          "required": true,
+                          "enum": [
+                            "VON"
+                          ],
+                          "default": "VON"
                         }
-                      },
-                      {
-                        "$ref": "#/definitions/RFF"
                       }
-                    ]
+                    }, {
+                      "$ref": "#/definitions/RFF"
+                    }]
                   }
                 }
               }
@@ -363,35 +344,32 @@
                   "$ref": "#/definitions/DOC",
                   "required": true
                 },
-                "dateTimes": {
+                "datetimes": {
                   "edi_order": 2,
                   "type": "array",
                   "maxItems": 9,
                   "items": {
                     "title": "Date Time",
                     "type": "object",
-                    "allOf": [
-                      {
-                        "properties": {
-                          "functionCodeQualifier": {
-                            "title": "Function Code Qualifier",
-                            "edi_ref": "2005",
-                            "edi_order": "1",
-                            "description": "Code qualifying the function of a date, time or period. [ (137) Document issue date time, (798) Transport equipment verified gross mass ascertained date/time, (225) Verification date ]",
-                            "type": "string",
-                            "enum": [
-                              "137",
-                              "798",
-                              "225"
-                            ],
-                            "required": true
-                          }
+                    "allOf": [{
+                      "properties": {
+                        "functionCodeQualifier": {
+                          "title": "Function Code Qualifier",
+                          "edi_ref": "2005",
+                          "edi_order": "1",
+                          "description": "Code qualifying the function of a date, time or period. [ (137) Document issue date time, (798) Transport equipment verified gross mass ascertained date/time, (225) Verification date ]",
+                          "type": "string",
+                          "enum": [
+                            "137",
+                            "798",
+                            "225"
+                          ],
+                          "required": true
                         }
-                      },
-                      {
-                        "$ref": "#/definitions/DTM"
                       }
-                    ]
+                    }, {
+                      "$ref": "#/definitions/DTM"
+                    }]
                   }
                 },
                 "parties": {
@@ -406,31 +384,28 @@
                       "nameAndAddress": {
                         "edi_order": 1,
                         "required": true,
-                        "allOf": [
-                          {
-                            "properties": {
-                              "partyFunctionCodeQualifier": {
-                                "title": "Party Function Code Qualifier",
-                                "edi_ref": "3035",
-                                "edi_order": "1",
-                                "description": "Code giving specific meaning to a party: [ (AM) Authorized official, (OB) Ordered by, (SPC) Party responsible to obtain SOLAS Verified Gross Mass, (TR) Terminal operator, (WPA) Weighting party ]",
-                                "type": "string",
-                                "maxLength": 3,
-                                "required": true,
-                                "enum": [
-                                  "AM",
-                                  "OB",
-                                  "SPC",
-                                  "WC",
-                                  "WPA"
-                                ]
-                              }
+                        "allOf": [{
+                          "properties": {
+                            "partyFunctionCodeQualifier": {
+                              "title": "Party Function Code Qualifier",
+                              "edi_ref": "3035",
+                              "edi_order": "1",
+                              "description": "Code giving specific meaning to a party: [ (AM) Authorized official, (OB) Ordered by, (SPC) Party responsible to obtain SOLAS Verified Gross Mass, (TR) Terminal operator, (WPA) Weighting party ]",
+                              "type": "string",
+                              "maxLength": 3,
+                              "required": true,
+                              "enum": [
+                                "AM",
+                                "OB",
+                                "SPC",
+                                "WC",
+                                "WPA"
+                              ]
                             }
-                          },
-                          {
-                            "$ref": "#/definitions/NAD"
                           }
-                        ]
+                        }, {
+                          "$ref": "#/definitions/NAD"
+                        }]
                       },
                       "contacts": {
                         "edi_order": 2,
@@ -443,26 +418,23 @@
                             "details": {
                               "edi_order": 1,
                               "required": true,
-                              "allOf": [
-                                {
-                                  "properties": {
-                                    "contactFunctionCode": {
-                                      "title": "Contact Function Code",
-                                      "edi_ref": "3139",
-                                      "edi_order": "1",
-                                      "description": "Code specifying the function of a contact (e.g. department or person). [ (BN) Certification contact, (RP) (Authorised) Responsible Person ]",
-                                      "type": "string",
-                                      "enum": [
-                                        "BN",
-                                        "RP"
-                                      ]
-                                    }
+                              "allOf": [{
+                                "properties": {
+                                  "contactFunctionCode": {
+                                    "title": "Contact Function Code",
+                                    "edi_ref": "3139",
+                                    "edi_order": "1",
+                                    "description": "Code specifying the function of a contact (e.g. department or person). [ (BN) Certification contact, (RP) (Authorised) Responsible Person ]",
+                                    "type": "string",
+                                    "enum": [
+                                      "BN",
+                                      "RP"
+                                    ]
                                   }
-                                },
-                                {
-                                  "$ref": "#/definitions/CTA"
                                 }
-                              ]
+                              }, {
+                                "$ref": "#/definitions/CTA"
+                              }]
                             },
                             "communicationChannels": {
                               "edi_order": 2,
@@ -490,9 +462,183 @@
       "edi_order": 100,
       "$ref": "#/definitions/UNT",
       "required": true
+    },
+    "interchangeTrailer": {
+      "edi_order": 101,
+      "$ref": "#/definitions/UNZ",
+      "required": true
     }
   },
   "definitions": {
+
+    "UNB": {
+      "title": "Interchange Header",
+      "edi_tag": "UNB",
+      "type": "object",
+      "properties": {
+        "syntax": {
+          "title": "Syntax",
+          "edi_ref": "S001",
+          "edi_order": "2",
+          "description": "Identification of the agency controlling the syntax and indication of syntax level.",
+          "type": "object",
+          "required": true,
+          "properties": {
+            "syntaxIdentifier": {
+              "title": "Syntax Identifier",
+              "edi_ref": "0001",
+              "edi_order": "1",
+              "description": "Coded identification of the agency controlling a syntax and syntax level used in an interchange.",
+              "type": "string",
+              "default": "UNOC",
+              "enum": [
+                "UNOC"
+              ],
+              "required": true,
+              "maxLength": 4
+            },
+            "syntaxVersionNumber": {
+              "title": "Syntax Type Version Number",
+              "edi_ref": "0002",
+              "edi_order": "2",
+              "description": "Version number of the syntax identified in the syntax identifier (0001).",
+              "type": "string",
+              "default": "3",
+              "required": true,
+              "enum": [
+                "3"
+              ],
+              "required": true,
+              "maxLength": 1
+            }
+          }
+        },
+
+        "interchangeSender": {
+          "title": "Interchange Sender",
+          "edi_ref": "S002",
+          "edi_order": "2",
+          "description": "Identification of the sender of the interchange.",
+          "type": "object",
+          "required": true,
+          "properties": {
+            "senderIdentification": {
+              "title": "Sender Identification",
+              "edi_ref": "0004",
+              "edi_order": "1",
+              "description": "Name or coded representation of the sender of a data interchange.",
+              "type": "string",
+              "required": true,
+              "maxLength": 35
+            },
+            "partnerIdentificationCodeQualifier": {
+              "title": "Partner Identification Code Qualifier",
+              "edi_ref": "0007",
+              "edi_order": "2",
+              "description": "Version number of the syntax identified in the syntax identifier (0001).",
+              "type": "string",
+              "default": "ZZZ",
+              "required": true,
+              "enum": [
+                "ZZZ"
+              ],
+              "required": true,
+              "maxLength": 4
+            },
+            "reverseRouting": {
+              "title": "Address for reverse routing",
+              "edi_ref": "0008",
+              "edi_order": "3",
+              "description": "Address for reverse routing",
+              "type": "string",
+              "maxLength": 14
+            }
+          }
+        },
+
+        "interchangeRecipient": {
+          "title": "Interchange Recipient",
+          "edi_ref": "S003",
+          "edi_order": "3",
+          "description": "Identification of the Recipient of the interchange.",
+          "type": "object",
+          "required": true,
+          "properties": {
+            "recipientIdentification": {
+              "title": "Recipient Identification",
+              "edi_ref": "0010",
+              "edi_order": "1",
+              "description": "Name or coded representation of the recipient of a data interchange.",
+              "type": "string",
+              "required": true,
+              "maxLength": 35
+            },
+            "partnerIdentificationCodeQualifier": {
+              "title": "Partner Identification Code Qualifier",
+              "edi_ref": "0007",
+              "edi_order": "2",
+              "description": "Version number of the syntax identified in the syntax identifier (0001).",
+              "type": "string",
+              "default": "ZZZ",
+              "required": true,
+              "enum": [
+                "ZZZ"
+              ],
+              "required": true,
+              "maxLength": 4
+            },
+            "routingAddress": {
+              "title": "Address for reverse routing",
+              "edi_ref": "0014",
+              "edi_order": "3",
+              "description": "Address for reverse routing",
+              "type": "string",
+              "maxLength": 14
+            }
+          }
+        },
+
+        "datetimeOfPreparation": {
+          "title": "Date and Time of Preparation",
+          "edi_ref": "S004",
+          "edi_order": "4",
+          "description": "Date and time of preparation of the interchange.",
+          "type": "object",
+          "required": true,
+          "properties": {
+            "dateOfPreparation": {
+              "title": "Date of preparation",
+              "edi_ref": "0017",
+              "edi_order": "1",
+              "description": "Name or coded representation of the recipient of a data interchange.",
+              "type": "string",
+              "required": true,
+              "format": "[0-9]{6}"
+            },
+            "timeOfPreparation": {
+              "title": "Time of preparation",
+              "edi_ref": "0019",
+              "edi_order": "1",
+              "description": "Name or coded representation of the recipient of a data interchange.",
+              "type": "string",
+              "required": true,
+              "format": "[0-9]{4}"
+            }
+          }
+        },
+
+        "interchangeControlReference": {
+          "title": "Interchange Control Reference",
+          "edi_ref": "0020",
+          "edi_order": "5",
+          "description": "Unique reference assigned by the sender to an interchange.",
+          "type": "string",
+          "required": true,
+          "maxLength": 14
+        }
+      }
+    },
+
     "UNH": {
       "title": "Message Header",
       "edi_tag": "UNH",
@@ -652,7 +798,7 @@
             }
           }
         },
-        "messageIdentificaton": {
+        "messageIdentification": {
           "title": "Document / Message Identification",
           "edi_ref": "C106",
           "edi_order": "2",
@@ -2096,6 +2242,33 @@
           "edi_ref": "0062",
           "edi_order": "2",
           "description": "Unique message reference assigned by the sender",
+          "type": "string",
+          "required": true,
+          "minLength": 1,
+          "maxLength": 14
+        }
+      }
+    },
+
+    "UNZ": {
+      "title": "Interchange Trailer",
+      "edi_tag": "UNZ",
+      "type": "object",
+      "properties": {
+        "interchangeControlCount": {
+          "title": "Interchange Control Count",
+          "edi_ref": "0036",
+          "edi_order": "1",
+          "description": "Count either of the number of messages or, if used, of the number of functional groups in an interchange.",
+          "type": "integer",
+          "maximum": 1,
+          "minimum": 1
+        },
+        "interchangeControlReference": {
+          "title": "Interchange Control Reference",
+          "edi_ref": "0020",
+          "edi_order": "2",
+          "description": "Unique reference assigned by the sender to an interchange.",
           "type": "string",
           "required": true,
           "minLength": 1,

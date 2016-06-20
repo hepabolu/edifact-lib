@@ -1,4 +1,23 @@
 {
+  "interchangeHeader": {
+    "syntax": {
+      "syntaxIdentifier": "UNOC",
+      "syntaxVersionNumber": "3"
+    },
+    "interchangeSender": {
+      "senderIdentification": "MTIEVGM",
+      "partnerIdentificationCodeQualifier": "ZZZ"
+    },
+    "interchangeRecipient": {
+      "recipientIdentification": "INTTRA",
+      "partnerIdentificationCodeQualifier": "ZZZ"
+    },
+    "datetimeOfPreparation": {
+      "dateOfPreparation": "160601",
+      "timeOfPreparation": "1430"
+    },
+    "interchangeControlReference": "IR-100"
+  },
   "messageHeader": {
     "messageReferenceNumber": "VERMA'S ID",
     "messageIdentifier": {
@@ -8,10 +27,8 @@
       "controllingAgency": "UN",
       "associationAssignedCode": "SMDG04"
     },
-    "commonAccessReference": "",
     "transferStatus": {
-      "sequenceMessageTransferNumber": 1,
-      "firstLastSequenceMessageTransferIndication": ""
+      "sequenceMessageTransferNumber": 1
     }
   },
   "beginningOfMessage": {
@@ -21,7 +38,7 @@
       "codeListResponsibleAgencyCode": "BCD",
       "documentName": "Some Name"
     },
-    "messageIdentificaton": {
+    "messageIdentification": {
       "documentIdentifier": "di-1234",
       "versionIdentifier": "1.0.1",
       "revisionIdentifier": "234"
@@ -68,37 +85,22 @@
     {
       "nameAndAddress": {
         "partyFunctionCodeQualifier": "DEI",
-        "partyIdentificationDetails": {
-          "partyIdentifier": "",
-          "codeListIdentificationCode": "",
-          "codeListResponsibleAgencyCode": ""
-        },
         "address": {
           "address1": "51 Wysdale Ave",
           "address2": "Twensy",
-          "address3": "Durban",
-          "address4": "",
-          "address5": ""
+          "address3": "Durban"
         },
         "partyName": {
           "partyName1": "Trucking Bar",
-          "partyName2": "",
-          "partyName3": "",
-          "partyName4": "",
-          "partyName5": "",
           "partyNameFormatCode": "KKJ"
         },
         "street": {
-          "street1": "18 Wednes Ave",
-          "street2": "",
-          "street3": "",
-          "street4": ""
+          "street1": "18 Wednes Ave"
         },
         "cityName": "Westville",
         "countrySubdivisionDetails": {
           "countrySubdivisionIdentifier": "CO",
           "codeListIdentificationCode": "CSA",
-          "codeListResponsibleAgencyCode": "",
           "countrySubdivisionName": "COUNTY"
         },
         "postalIdentificationCode": "KT12 3JU",
@@ -147,7 +149,11 @@
     }
   ],
   "messageTrailer": {
-    "numberOfSegmentsInMessage": 8,
+    "numberOfSegmentsInMessage": 15,
     "messageReferenceNumber": "VERMA'S ID"
+  },
+  "interchangeTrailer": {
+    "interchangeControlCount": 1,
+    "interchangeControlReference": "IR-100"
   }
 }

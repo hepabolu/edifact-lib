@@ -1,0 +1,70 @@
+[
+   {
+      "nameAndAddress": {
+         "address": "4 Bennington Rd",
+         "name": "Andy"
+      },
+      "contacts": [
+         {
+            "details": {
+               "firstName": "John",
+               "lastName": "DOE"
+            }
+         },
+         {
+            "details": {
+               "firstName": "Simon",
+               "lastName": "Joans"
+            },
+            "communicationChannels": [
+               {
+                  "channel": "email",
+                  "value": "simon.joans@lj.com"
+               },
+               {
+                  "channel": "phone",
+                  "value": "+27322122345"
+               }
+            ]
+         },
+         {
+            "details": {
+               "firstName": "Lydia",
+               "lastName": "Lime"
+            }
+         }
+      ]
+   },
+   {
+      "nameAndAddress": {
+         "address": "92 Daffie Road",
+         "name": "North"
+      },
+      "contacts": [
+         {
+            "details": {
+               "firstName": "Andrew",
+               "lastName": "Dewson"
+            },
+            "communicationChannels": [
+               {
+                  "channel": "phone",
+                  "value": "+5421233321"
+               }
+            ]
+         },
+         {
+            "details": {
+               "firstName": "Sarel",
+               "lastName": "Van Royen"
+            }
+         }
+      ]
+   },
+   {
+      "nameAndAddress": {
+         "address": "251 Scham Street",
+         "name": "Brad"
+      }
+   }
+]

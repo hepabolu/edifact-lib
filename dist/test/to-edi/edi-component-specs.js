@@ -15,7 +15,7 @@ suite('Edi Components', function () {
   var jsonSchema, ediConfig;
 
   setup(function () {
-    jsonSchema = JSON.parse(fs.readFileSync(path.resolve(process.env.PWD, "src/test/edi/fixtures/test-simple-schema.json.schema"), 'utf8'));
+    jsonSchema = JSON.parse(fs.readFileSync(path.resolve(process.env.PWD, "src/test/to-edi/fixtures/test-simple-schema.json.schema"), 'utf8'));
     ediConfig = {
       segmentSeparator: "'\n",
       dataElementSeparator: "+",
@@ -38,6 +38,46 @@ suite('Edi Components', function () {
 
         var actual = seg.toEdi(data, ediConfig);
         assert.deepEqual(actual, "FOO+bar?:123'FOO+foo?:456'FOO+tum?:789'");
+      });
+    });
+
+    suite('Array of Segments by DataElement', function () {
+      setup(function () {
+        var array_of_segments = {
+          "edi_order": 2,
+          "type": "array",
+          "maxItems": 2,
+          "title": "Foos",
+          "items": {
+            "edi_order": 1,
+            "edi_tag": "FOO",
+            "edi_ref": "C1222",
+            "title": "Values",
+            "type": "object",
+            "properties": {
+              "value1": {
+                "edi_order": 1,
+                "edi_ref": "2005",
+                "type": "string"
+              },
+              "value2": {
+                "edi_order": 2,
+                "edi_ref": "2006",
+                "type": "string"
+              }
+            }
+          }
+        };
+
+        seg = new Edi.EdiSegmentGroup("array_of_segments", array_of_segments);
+      });
+
+      test('should render as single DataElement with DataComponents', function () {
+        ediConfig.segmentSeparator = "'";
+        var data = [{ value1: "bar1", value2: "foo1" }, { value1: "bar2", value2: "foo2" }];
+
+        var actual = seg.toEdi(data, ediConfig);
+        assert.deepEqual(actual, "FOO+bar1:foo1'FOO+bar2:foo2'");
       });
     });
 
@@ -102,6 +142,35 @@ suite('Edi Components', function () {
 
       var actual = seg.toEdi(data, ediConfig);
       assert.deepEqual(actual, "MEA+Test1:++Test4'\n");
+    });
+
+    test("should reset segment count on UNH segment toEdi", function () {
+      ediConfig.totalSegments = 10;
+      seg.config.tag = "UNH";
+      seg.toEdi({}, ediConfig);
+      assert.equal(ediConfig.totalSegments, 1);
+    });
+
+    test("should increment totalMessages on UNH segment toEdi", function () {
+      ediConfig.totalMessages = 10;
+      seg.config.tag = "UNH";
+      seg.toEdi({}, ediConfig);
+      assert.equal(ediConfig.totalMessages, 11);
+    });
+  });
+
+  suite('EdiSegment as DataElement Container', function () {
+    var seg;
+    setup(function () {
+      jsonSchema.properties.measurement.properties.foo.edi_tag = "FOO";
+      seg = new Edi.EdiSegment("measurement-foo", jsonSchema.properties.measurement.properties.foo);
+    });
+
+    test("should render with single DataComponent", function () {
+      var data = { "foo_bar1": "Test1", "foo_bar4": "Test4" };
+
+      var actual = seg.toEdi(data, ediConfig);
+      assert.deepEqual(actual, "FOO+Test1:::Test4'\n");
     });
   });
 

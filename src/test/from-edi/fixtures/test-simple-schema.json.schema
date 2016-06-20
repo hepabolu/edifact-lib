@@ -1,0 +1,186 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "measurement": {
+      "edi_order": 1,
+      "edi_tag": "MEA",
+      "type": "object",
+      "required": true,
+      "properties": {
+        "foo": {
+          "edi_order": "1",
+          "edi_ref": "C5422",
+          "type": "object",
+          "properties": {
+            "foo_bar1": {
+              "edi_order": "1",
+              "edi_ref": "4301",
+              "type": "string"
+            },
+            "foo_bar2": {
+              "edi_order": "2",
+              "edi_ref": "4302",
+              "type": "string",
+              "required": true
+            },
+            "foo_bar3": {
+              "edi_order": "3",
+              "edi_ref": "4303",
+              "type": "string"
+            },
+            "foo_bar4": {
+              "edi_order": "4",
+              "edi_ref": "4304",
+              "type": "string"
+            }
+          }
+        },
+        "bar1": {
+          "edi_order": "2",
+          "edi_ref": "2122",
+          "type": "string"
+        },
+        "bar2": {
+          "edi_order": "3",
+          "edi_ref": "2122",
+          "type": "string",
+          "required": true
+        },
+        "bar3": {
+          "edi_order": "4",
+          "edi_ref": "2122",
+          "type": "string"
+        },
+        "bar4": {
+          "edi_order": "5",
+          "edi_ref": "2122",
+          "type": "string"
+        }
+      }
+    },
+    "array_of_segments": {
+      "edi_order": 2,
+      "type": "array",
+      "maxItems": 2,
+      "title": "Foos",
+      "items": {
+        "edi_order": 1,
+        "edi_tag": "FOO",
+        "title": "Date",
+        "type": "object",
+        "properties": {
+          "date_value": {
+            "edi_order": 1,
+            "edi_ref": "2005",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "array_of_objects": {
+      "edi_order": 2,
+      "type": "array",
+      "maxItems": 9,
+      "items": {
+        "title": "Date Time",
+        "type": "object",
+        "properties": {
+          "my_bar_seg": {
+            "edi_order": 1,
+            "edi_tag": "BAR",
+            "type": "object",
+            "properties": {
+              "bar_val": {
+                "edi_order": 1,
+                "edi_ref": 9212,
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "nested_segment_groups": {
+      "edi_order": 3,
+      "type": "array",
+      "maxItems": 9,
+      "items": {
+        "title": "Party",
+        "type": "object",
+        "properties": {
+          "nameAndAddress": {
+            "edi_order": 1,
+            "edi_tag": "NAD",
+            "edi_ref": "C3035",
+            "required": true,
+            "properties": {
+              "address": {
+                "edi_order": 1,
+                "edi_ref": "3035",
+                "type": "string"
+              },
+              "name": {
+                "edi_order": 2,
+                "edi_ref": "3035",
+                "type": "string"
+              }
+            }
+          },
+          "contacts": {
+            "edi_order": 2,
+            "type": "array",
+            "maxItems": 9,
+            "items": {
+              "title": "Contact",
+              "type": "object",
+              "properties": {
+                "details": {
+                  "edi_order": 1,
+                  "edi_tag": "CTA",
+                  "edi_ref": "C0799",
+                  "required": true,
+                  "properties": {
+                    "firstName": {
+                      "edi_order": 1,
+                      "edi_ref": "3139",
+                      "type": "string"
+                    },
+                    "lastName": {
+                      "edi_order": 2,
+                      "edi_ref": "3140",
+                      "type": "string"
+                    }
+                  }
+                },
+                "communicationChannels": {
+                  "edi_order": 2,
+                  "type": "array",
+                  "maxItems": 9,
+                  "items": {
+                    "edi_tag": "COM",
+                    "edi_ref": "C076",
+                    "type": "object",
+                    "properties": {
+                      "channel": {
+                        "edi_order": 1,
+                        "edi_ref": "3148",
+                        "type": "string",
+                        "required": true
+                      },
+                      "value": {
+                        "edi_order": 2,
+                        "edi_ref": "3148",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

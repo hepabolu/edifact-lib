@@ -1,0 +1,165 @@
+{
+  "interchangeHeader": {
+    "syntax": {
+      "syntaxIdentifier": "UNOC",
+      "syntaxVersionNumber": "3"
+    },
+    "interchangeSender": {
+      "senderIdentification": "MTIEVGM",
+      "partnerIdentificationCodeQualifier": "ZZZ"
+    },
+    "interchangeRecipient": {
+      "recipientIdentification": "INTTRA",
+      "partnerIdentificationCodeQualifier": "ZZZ"
+    },
+    "datetimeOfPreparation": {
+      "dateOfPreparation": "160601",
+      "timeOfPreparation": "1430"
+    },
+    "interchangeControlReference": "IR-100"
+  },
+  "messageHeader": {
+    "messageReferenceNumber": "VERMA'S ID",
+    "messageIdentifier": {
+      "messageTypeIdentifier": "VERMAS",
+      "messageTypeVersionNumber": "D",
+      "messageTypeReleaseNumber": "16A",
+      "controllingAgency": "UN",
+      "associationAssignedCode": "SMDG04"
+    },
+    "transferStatus": {
+      "sequenceMessageTransferNumber": 1,
+      "firstLastSequenceMessageTransferIndication": ""
+    }
+  },
+  "beginningOfMessage": {
+    "messageName": {
+      "documentNameCode": "ABC",
+      "codeListIdentificationCode": "Some:doc+code?",
+      "codeListResponsibleAgencyCode": "BCD",
+      "documentName": "Some Name"
+    },
+    "messageIdentification": {
+      "documentIdentifier": "di-1234",
+      "versionIdentifier": "1.0.1",
+      "revisionIdentifier": "234"
+    },
+    "messageFunctionCode": "9",
+    "responseTypeCode": "CBA",
+    "documentStatusCode": "dsc",
+    "languageNameCode": "eng"
+  },
+  "datetime": {
+    "functionCodeQualifier": "137",
+    "text": "201201011740",
+    "format": "203"
+  },
+  "references": [
+    {
+      "reference": {
+        "referenceCodeQualifier": "AFB",
+        "referenceIdentifier": "ref-123",
+        "documentLineIdentifier": "i-1",
+        "versionIdentifier": "ri-333"
+      },
+      "datetime": {
+        "functionCodeQualifier": "137",
+        "text": "201511300451",
+        "format": "203"
+      }
+    },
+    {
+      "reference": {
+        "referenceCodeQualifier": "ABE",
+        "referenceIdentifier": "ref-456",
+        "documentLineIdentifier": "i-2",
+        "versionIdentifier": "ri-444"
+      },
+      "datetime": {
+        "functionCodeQualifier": "137",
+        "text": "201511140430",
+        "format": "203"
+      }
+    }
+  ],
+  "parties": [
+    {
+      "nameAndAddress": {
+        "partyFunctionCodeQualifier": "DEI",
+        "address": {
+          "address1": "51 Wysdale Ave",
+          "address2": "Twensy",
+          "address3": "Durban"
+        },
+        "partyName": {
+          "partyName1": "Trucking Bar",
+          "partyName2": "",
+          "partyName3": "",
+          "partyName4": "",
+          "partyName5": "",
+          "partyNameFormatCode": "KKJ"
+        },
+        "street": {
+          "street1": "18 Wednes Ave"
+        },
+        "cityName": "Westville",
+        "countrySubdivisionDetails": {
+          "countrySubdivisionIdentifier": "CO",
+          "codeListIdentificationCode": "CSA",
+          "codeListResponsibleAgencyCode": "",
+          "countrySubdivisionName": "COUNTY"
+        },
+        "postalIdentificationCode": "KT12 3JU",
+        "countryIdentifier": "UK"
+      },
+      "contacts": [
+        {
+          "details": {
+            "contactFunctionCode": "BN",
+            "contactDetails": {
+              "contactIdentifier": "My Foo Dept",
+              "contactName": "Jono Langley"
+            }
+          },
+          "communicationChannels": [
+            {
+              "communicationAddressIdentifier": "08412212234",
+              "communicationMeansTypeCode": "AL"
+            },
+            {
+              "communicationAddressIdentifier": "jono_tt@hotmail.com",
+              "communicationMeansTypeCode": "EM"
+            }
+          ]
+        },
+        {
+          "details": {
+            "contactFunctionCode": "CW",
+            "contactDetails": {
+              "contactIdentifier": "driver",
+              "contactName": "Mr Foo Driver"
+            }
+          },
+          "communicationChannels": [
+            {
+              "communicationAddressIdentifier": "+12221222121",
+              "communicationMeansTypeCode": "AL"
+            },
+            {
+              "communicationAddressIdentifier": "driver@me.com",
+              "communicationMeansTypeCode": "EM"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "messageTrailer": {
+    "numberOfSegmentsInMessage": 8,
+    "messageReferenceNumber": "VERMA'S ID"
+  },
+  "interchangeTrailer": {
+    "interchangeControlCount": 1,
+    "interchangeControlReference": "IR-100"
+  }
+}
