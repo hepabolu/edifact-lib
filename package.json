@@ -1,6 +1,6 @@
 {
   "name": "edifact-lib",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "EDIFACT Helper to convert EDIFACT to and from JSON",
   "scripts": {
     "test": "NODE_ENV=test mocha -R spec"

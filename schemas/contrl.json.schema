@@ -2,6 +2,11 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
   "properties": {
+    "interchangeHeader": {
+      "edi_order": 1,
+      "$ref": "#/definitions/UNB",
+      "required": true
+    },
     "messageHeader": {
       "edi_order": 1,
       "$ref": "#/definitions/UNH",
@@ -31,6 +36,173 @@
     }
   },
   "definitions": {
+    "UNB": {
+      "title": "Interchange Header",
+      "edi_tag": "UNB",
+      "type": "object",
+      "properties": {
+        "syntax": {
+          "title": "Syntax",
+          "edi_ref": "S001",
+          "edi_order": "2",
+          "description": "Identification of the agency controlling the syntax and indication of syntax level.",
+          "type": "object",
+          "required": true,
+          "properties": {
+            "syntaxIdentifier": {
+              "title": "Syntax Identifier",
+              "edi_ref": "0001",
+              "edi_order": "1",
+              "description": "Coded identification of the agency controlling a syntax and syntax level used in an interchange.",
+              "type": "string",
+              "default": "UNOC",
+              "enum": [
+                "UNOC"
+              ],
+              "required": true,
+              "maxLength": 4
+            },
+            "syntaxVersionNumber": {
+              "title": "Syntax Type Version Number",
+              "edi_ref": "0002",
+              "edi_order": "2",
+              "description": "Version number of the syntax identified in the syntax identifier (0001).",
+              "type": "string",
+              "default": "3",
+              "required": true,
+              "enum": [
+                "3"
+              ],
+              "required": true,
+              "maxLength": 1
+            }
+          }
+        },
+
+        "interchangeSender": {
+          "title": "Interchange Sender",
+          "edi_ref": "S002",
+          "edi_order": "2",
+          "description": "Identification of the sender of the interchange.",
+          "type": "object",
+          "required": true,
+          "properties": {
+            "senderIdentification": {
+              "title": "Sender Identification",
+              "edi_ref": "0004",
+              "edi_order": "1",
+              "description": "Name or coded representation of the sender of a data interchange.",
+              "type": "string",
+              "required": true,
+              "maxLength": 35
+            },
+            "partnerIdentificationCodeQualifier": {
+              "title": "Partner Identification Code Qualifier",
+              "edi_ref": "0007",
+              "edi_order": "2",
+              "description": "Version number of the syntax identified in the syntax identifier (0001).",
+              "type": "string",
+              "default": "ZZZ",
+              "required": true,
+              "enum": [
+                "ZZZ"
+              ],
+              "required": true,
+              "maxLength": 4
+            },
+            "reverseRouting": {
+              "title": "Address for reverse routing",
+              "edi_ref": "0008",
+              "edi_order": "3",
+              "description": "Address for reverse routing",
+              "type": "string",
+              "maxLength": 14
+            }
+          }
+        },
+
+        "interchangeRecipient": {
+          "title": "Interchange Recipient",
+          "edi_ref": "S003",
+          "edi_order": "3",
+          "description": "Identification of the Recipient of the interchange.",
+          "type": "object",
+          "required": true,
+          "properties": {
+            "recipientIdentification": {
+              "title": "Recipient Identification",
+              "edi_ref": "0010",
+              "edi_order": "1",
+              "description": "Name or coded representation of the recipient of a data interchange.",
+              "type": "string",
+              "required": true,
+              "maxLength": 35
+            },
+            "partnerIdentificationCodeQualifier": {
+              "title": "Partner Identification Code Qualifier",
+              "edi_ref": "0007",
+              "edi_order": "2",
+              "description": "Version number of the syntax identified in the syntax identifier (0001).",
+              "type": "string",
+              "default": "ZZZ",
+              "required": true,
+              "enum": [
+                "ZZZ"
+              ],
+              "required": true,
+              "maxLength": 4
+            },
+            "routingAddress": {
+              "title": "Address for reverse routing",
+              "edi_ref": "0014",
+              "edi_order": "3",
+              "description": "Address for reverse routing",
+              "type": "string",
+              "maxLength": 14
+            }
+          }
+        },
+
+        "datetimeOfPreparation": {
+          "title": "Date and Time of Preparation",
+          "edi_ref": "S004",
+          "edi_order": "4",
+          "description": "Date and time of preparation of the interchange.",
+          "type": "object",
+          "required": true,
+          "properties": {
+            "dateOfPreparation": {
+              "title": "Date of preparation",
+              "edi_ref": "0017",
+              "edi_order": "1",
+              "description": "Name or coded representation of the recipient of a data interchange.",
+              "type": "string",
+              "required": true,
+              "format": "[0-9]{6}"
+            },
+            "timeOfPreparation": {
+              "title": "Time of preparation",
+              "edi_ref": "0019",
+              "edi_order": "1",
+              "description": "Name or coded representation of the recipient of a data interchange.",
+              "type": "string",
+              "required": true,
+              "format": "[0-9]{4}"
+            }
+          }
+        },
+
+        "interchangeControlReference": {
+          "title": "Interchange Control Reference",
+          "edi_ref": "0020",
+          "edi_order": "5",
+          "description": "Unique reference assigned by the sender to an interchange.",
+          "type": "string",
+          "required": true,
+          "maxLength": 14
+        }
+      }
+    },
     "UNH": {
       "title": "Message Header",
       "edi_tag": "UNH",
@@ -79,7 +251,7 @@
             },
             "messageTypeReleaseNumber": {
               "title": "Message Type Release Number",
-              "edi_ref": "0052",
+              "edi_ref": "0054",
               "edi_order": "3",
               "description": "Release number within the current message type version number (messageTypeVersionNumber).",
               "type": "string",

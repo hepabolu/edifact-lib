@@ -686,7 +686,7 @@
             },
             "messageTypeReleaseNumber": {
               "title": "Message Type Release Number",
-              "edi_ref": "0052",
+              "edi_ref": "0054",
               "edi_order": "3",
               "description": "Release number within the current message type version number (messageTypeVersionNumber).",
               "type": "string",
