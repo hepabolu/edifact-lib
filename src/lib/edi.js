@@ -216,26 +216,43 @@ class EdiSegmentGroup extends EdiBase {
   }
 
   parse(reader) {
-    var current, segs;
-
+    var current, segs, nest_order;
+    
     //continue in the captcha group until no more matches)
-    while(reader.current() && reader.current().tag === this.config.groupTag) {
+    // allow for explicit nesting numbers
+    while (reader.current() && _.startsWith(reader.current().tag, this.config.groupTag))  {
+      if (reader.current().tag !== this.config.groupTag) {
+        // explicit nesting, for now we assume only one level
+        nest_order = reader.current().tag.match(/.{4}(.*)/)[1];
+      }
+
       segs = segs || [];
       var val = {};
 
+      if (nest_order) {
+        segs[nest_order] = segs[nest_order] || {};
+      }
       for (let i = 0; i < this.items.length; i++) {
         var dVal = this.items[i].parse(reader);
-        if(dVal) {
+        if (dVal) {
           val[this.items[i].name] = dVal;
         }
-
       }
-
-      if(!_.isEmpty(val)) {
-        segs.push(val);
+    
+      if (!_.isEmpty(val)) {
+        if (nest_order) {
+          segs[nest_order] = val;
+        }
+        else {
+          segs.push(val);
+        }
       } else {
         reader.next();
       }
+    }
+
+    if (nest_order && segs[0] === undefined) {
+      segs.shift();
     }
 
     return segs

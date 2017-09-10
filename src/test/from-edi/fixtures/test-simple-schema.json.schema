@@ -181,6 +181,24 @@
           }
         }
       }
+    },
+    "explicit_nesting": {
+      "edi_order": 4,
+      "type": "array",
+      "maxItems": 99,
+      "items": {
+         "title": "text",
+         "edi_tag": "TXT",
+         "edi_ref": "1234",
+         "type": "object",
+         "properties": {
+            "text": {
+               "edi_order": 1,
+               "edi_ref": "2345",
+               "type": "string"
+            }
+         }
+      }
     }
   }
 }
