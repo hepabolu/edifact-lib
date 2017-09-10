@@ -10,11 +10,11 @@ var RequiredPropertyError = function (_Error) {
   _inherits(RequiredPropertyError, _Error);
 
   function RequiredPropertyError() {
-    var config = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
     _classCallCheck(this, RequiredPropertyError);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(RequiredPropertyError).call(this));
+    var _this = _possibleConstructorReturn(this, (RequiredPropertyError.__proto__ || Object.getPrototypeOf(RequiredPropertyError)).call(this));
 
     _this.propertyName = config.propertyName;
     _this.causingSchema = config.causingSchema;
@@ -34,7 +34,7 @@ var JsonSchemaValidationError = function (_Error2) {
   function JsonSchemaValidationError(errors) {
     _classCallCheck(this, JsonSchemaValidationError);
 
-    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(JsonSchemaValidationError).call(this, "Json Schema Validation Errors:\n" + JSON.stringify(errors, null, 2)));
+    var _this2 = _possibleConstructorReturn(this, (JsonSchemaValidationError.__proto__ || Object.getPrototypeOf(JsonSchemaValidationError)).call(this, "Json Schema Validation Errors:\n" + JSON.stringify(errors, null, 2)));
 
     _this2.errors = errors;
     return _this2;

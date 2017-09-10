@@ -6,10 +6,8 @@ var path = require('path');
 var _ = require('lodash');
 var Edi = require('../../lib/edi');
 
-var _require = require("../../lib/edi-errors.js");
-
-var JsonSchemaValidationError = _require.JsonSchemaValidationError;
-
+var _require = require("../../lib/edi-errors.js"),
+    JsonSchemaValidationError = _require.JsonSchemaValidationError;
 
 suite('Convert to EDI', function () {
   var jsonSchema;

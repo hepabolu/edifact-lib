@@ -2,10 +2,8 @@
 
 var _ = require('lodash');
 
-var _require = require("./edi-errors.js");
-
-var RequiredPropertyError = _require.RequiredPropertyError;
-
+var _require = require("./edi-errors.js"),
+    RequiredPropertyError = _require.RequiredPropertyError;
 
 var flattenProperty = function flattenProperty(definitions, obj) {
 

@@ -7,10 +7,8 @@ var path = require('path');
 var _ = require('lodash');
 var Edi = require('../../lib/edi');
 
-var _require = require("../../lib/edi-errors.js");
-
-var JsonSchemaValidationError = _require.JsonSchemaValidationError;
-
+var _require = require("../../lib/edi-errors.js"),
+    JsonSchemaValidationError = _require.JsonSchemaValidationError;
 
 suite('Edi Components', function () {
   var jsonSchema, ediConfig;
@@ -70,6 +68,22 @@ suite('Edi Components', function () {
 
         var reader = new Edi.EdiSegmentReader(input, ediConfig);
         var expected = JSON.parse(fs.readFileSync(path.resolve(process.env.PWD, "src/test/from-edi/fixtures/segment-group-parse-success.json"), 'utf8'));
+
+        var actual = seg.parse(reader, ediConfig);
+        assert.deepEqual(actual, expected);
+      });
+    });
+
+    suite('Explicit Nested Segments', function () {
+      setup(function () {
+        seg = new Edi.EdiSegmentGroup("explicit_nesting", jsonSchema.properties.explicit_nesting);
+      });
+
+      test('should parse segments', function () {
+        var input = fs.readFileSync(path.resolve(process.env.PWD, "src/test/from-edi/fixtures/explicit-nesting-input.edi"), 'utf8');
+
+        var reader = new Edi.EdiSegmentReader(input, ediConfig);
+        var expected = JSON.parse(fs.readFileSync(path.resolve(process.env.PWD, "src/test/from-edi/fixtures/explicit-nesting-parse-success.json"), 'utf8'));
 
         var actual = seg.parse(reader, ediConfig);
         assert.deepEqual(actual, expected);

@@ -12,10 +12,8 @@ var _ = require('lodash');
 var helpers = require('./edi-helpers.js');
 var Validator = require('jsonschema').Validator;
 
-var _require = require("./edi-errors.js");
-
-var JsonSchemaValidationError = _require.JsonSchemaValidationError;
-
+var _require = require("./edi-errors.js"),
+    JsonSchemaValidationError = _require.JsonSchemaValidationError;
 
 function ediItemFromConfig(name, config, level, parent) {
 
@@ -42,7 +40,7 @@ function ediItemFromConfig(name, config, level, parent) {
 The replacement expression based on special "EDI" characters used
 */
 function getEdiEscapeRegex() {
-  var config = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+  var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   return new RegExp("([" + config.segmentSeparator + config.dataElementSeparator + config.dataComponentSeparator + config.releaseCharacter + "])", "g");
 }
@@ -125,11 +123,11 @@ var EdiSegment = function (_EdiBase) {
   _inherits(EdiSegment, _EdiBase);
 
   function EdiSegment(name, config) {
-    var level = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+    var level = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
 
     _classCallCheck(this, EdiSegment);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EdiSegment).call(this, name, config));
+    var _this = _possibleConstructorReturn(this, (EdiSegment.__proto__ || Object.getPrototypeOf(EdiSegment)).call(this, name, config));
 
     _this.config.level = level;
     _this.config.tag = config.edi_tag;
@@ -193,7 +191,7 @@ var EdiSegmentGroup = function (_EdiBase2) {
   function EdiSegmentGroup(name, config, level) {
     _classCallCheck(this, EdiSegmentGroup);
 
-    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(EdiSegmentGroup).call(this, name, config));
+    var _this2 = _possibleConstructorReturn(this, (EdiSegmentGroup.__proto__ || Object.getPrototypeOf(EdiSegmentGroup)).call(this, name, config));
 
     _this2.config.level = level;
     _this2.config.edi_ref = config.items.edi_ref;
@@ -303,13 +301,22 @@ var EdiSegmentGroup = function (_EdiBase2) {
   }, {
     key: 'parse',
     value: function parse(reader) {
-      var current, segs;
+      var current, segs, nest_order;
 
       //continue in the captcha group until no more matches)
-      while (reader.current() && reader.current().tag === this.config.groupTag) {
+      // allow for explicit nesting numbers
+      while (reader.current() && _.startsWith(reader.current().tag, this.config.groupTag)) {
+        if (reader.current().tag !== this.config.groupTag) {
+          // explicit nesting, for now we assume only one level
+          nest_order = reader.current().tag.match(/.{4}(.*)/)[1];
+        }
+
         segs = segs || [];
         var val = {};
 
+        if (nest_order) {
+          segs[nest_order] = segs[nest_order] || {};
+        }
         for (var i = 0; i < this.items.length; i++) {
           var dVal = this.items[i].parse(reader);
           if (dVal) {
@@ -318,10 +325,18 @@ var EdiSegmentGroup = function (_EdiBase2) {
         }
 
         if (!_.isEmpty(val)) {
-          segs.push(val);
+          if (nest_order) {
+            segs[nest_order] = val;
+          } else {
+            segs.push(val);
+          }
         } else {
           reader.next();
         }
+      }
+
+      if (nest_order && segs[0] === undefined) {
+        segs.shift();
       }
 
       return segs;
@@ -337,7 +352,7 @@ var EdiDataElement = function (_EdiBase3) {
   function EdiDataElement(name, config) {
     _classCallCheck(this, EdiDataElement);
 
-    var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(EdiDataElement).call(this, name, config));
+    var _this3 = _possibleConstructorReturn(this, (EdiDataElement.__proto__ || Object.getPrototypeOf(EdiDataElement)).call(this, name, config));
 
     _this3.items = _this3.parseConfig(config.properties);
     return _this3;
@@ -381,7 +396,7 @@ var EdiDataComponent = function (_EdiBase4) {
   function EdiDataComponent(name, config, parent) {
     _classCallCheck(this, EdiDataComponent);
 
-    var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(EdiDataComponent).call(this, name, config));
+    var _this4 = _possibleConstructorReturn(this, (EdiDataComponent.__proto__ || Object.getPrototypeOf(EdiDataComponent)).call(this, name, config));
 
     _this4.config.parentConfig = parent ? parent.config : {};
     return _this4;
@@ -438,7 +453,7 @@ var Edi = function (_EdiBase5) {
   function Edi(jsonSchema) {
     _classCallCheck(this, Edi);
 
-    var _this5 = _possibleConstructorReturn(this, Object.getPrototypeOf(Edi).call(this, "", jsonSchema.properties));
+    var _this5 = _possibleConstructorReturn(this, (Edi.__proto__ || Object.getPrototypeOf(Edi)).call(this, "", jsonSchema.properties));
 
     _this5.__validate(jsonSchema);
     _this5.jsonSchema = jsonSchema;
@@ -551,7 +566,7 @@ var Edi = function (_EdiBase5) {
   }, {
     key: '__getConfig',
     value: function __getConfig() {
-      var config = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+      var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
       config = _.clone(config);
       config.segmentSeparator = config.segmentSeparator || "'\n";
