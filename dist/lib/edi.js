@@ -591,7 +591,22 @@ var EdiSegmentReader = function () {
   _createClass(EdiSegmentReader, [{
     key: 'initSegments',
     value: function initSegments(input) {
+      var serviceAdvice = this.getServiceAdvice(input);
+      if (serviceAdvice) {
+        this.config.dataElementSeparator = serviceAdvice.dataElementSeparator;
+        this.config.dataComponentSeparator = serviceAdvice.dataComponentSeparator;
+        this.config.decimalNotation = serviceAdvice.decimalNotation;
+        this.config.releaseCharacter = serviceAdvice.releaseCharacter;
+        this.config.segmentSeparator = serviceAdvice.segmentSeparator;
+      }
+
       var items = this.regexSplitter(input, this.config.segmentSeparator, this.config.releaseCharacter);
+
+      if (serviceAdvice) {
+        // remove the first line to avoid recurrence
+        items = items.shift();
+      }
+
       var segments = [];
       for (var i = 0; i < items.length; i++) {
         var dataElms = this.regexSplitter(items[i], this.config.dataElementSeparator, this.config.releaseCharacter);
@@ -615,6 +630,21 @@ var EdiSegmentReader = function () {
       }
 
       return segments;
+    }
+  }, {
+    key: 'getServiceAdvice',
+    value: function getServiceAdvice(input) {
+      var serviceAdvice = undefined;
+
+      if (input.substring(0, 3) === 'UNA') {
+        serviceAdvice = {};
+        serviceAdvice.dataComponentSeparator = input.charAt(3);
+        serviceAdvice.dataElementSeparator = input.charAt(4);
+        serviceAdvice.decimalNotation = input.charAt(5);
+        serviceAdvice.releaseCharacter = input.charAt(6);
+        serviceAdvice.segmentSeparator = input.charAt(8);
+      }
+      return serviceAdvice;
     }
   }, {
     key: 'regexSplitter',
