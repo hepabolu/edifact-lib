@@ -604,7 +604,7 @@ var EdiSegmentReader = function () {
 
       if (serviceAdvice) {
         // remove the first line to avoid recurrence
-        items = items.shift();
+        items.shift();
       }
 
       var segments = [];
