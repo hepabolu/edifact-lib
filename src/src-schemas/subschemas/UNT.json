@@ -1,0 +1,33 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "description": "UNT segment",
+    "id": "/UNT",
+    "type": "object",
+    "properties": {
+        "UNT": {
+            "title": "Message Trailer",
+            "edi_tag": "UNT",
+            "type": "object",
+            "required": ["messageReferenceNumber"],
+            "properties": {
+               "numberOfSegmentsInMessage": {
+                  "title": "Number of Segments in message",
+                  "edi_ref": "0074",
+                  "edi_order": "1",
+                  "description": "Control count of number of segments in a message.",
+                  "type": "integer",
+                  "maximum": 999999
+               },
+               "messageReferenceNumber": {
+                  "title": "Message Reference Number",
+                  "edi_ref": "0062",
+                  "edi_order": "2",
+                  "description": "Unique message reference assigned by the sender",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 14
+               }
+            }
+         }
+    }
+}

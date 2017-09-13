@@ -1,0 +1,127 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "description": "BGM segment",
+  "id": "/BGM",
+  "type": "object",
+  "properties": {
+    "BGM": {
+      "title": "Beginning of Message",
+      "edi_tag": "BGM",
+      "type": "object",
+      "properties": {
+        "messageName": {
+          "title": "Document / Message Name",
+          "edi_ref": "C002",
+          "edi_order": "1",
+          "description":
+            "Identification of a type of document/message by code or name. Code preferred.",
+          "type": "object",
+          "properties": {
+            "documentNameCode": {
+              "title": "Document Name Code",
+              "edi_ref": "1001",
+              "edi_order": "1",
+              "description": "Code specifying the document name.",
+              "type": "string",
+              "maxLength": 3
+            },
+            "codeListIdentificationCode": {
+              "title": "Code List Identification Code",
+              "edi_ref": "1131",
+              "edi_order": "2",
+              "description":
+                "Code identifying a user or association maintained code list.",
+              "type": "string",
+              "maxLength": 17
+            },
+            "codeListResponsibleAgencyCode": {
+              "title": "Code List Responsible Agency Code",
+              "edi_ref": "3055",
+              "edi_order": "3",
+              "description":
+                "Code specifying the agency responsible for a code list.",
+              "type": "string",
+              "maxLength": 3
+            },
+            "documentName": {
+              "title": "Document Name",
+              "edi_ref": "1000",
+              "edi_order": "4",
+              "description": "Name of Document.",
+              "type": "string",
+              "maxLength": 35
+            }
+          }
+        },
+        "messageIdentification": {
+          "title": "Document / Message Identification",
+          "edi_ref": "C106",
+          "edi_order": "2",
+          "description":
+            "Identification of a document/message by its number and eventually its version or revision.",
+          "type": "object",
+          "properties": {
+            "documentIdentifier": {
+              "title": "Document Identifier",
+              "edi_ref": "1004",
+              "edi_order": "1",
+              "description": "To identify a document.",
+              "type": "string",
+              "maxLength": 70
+            },
+            "versionIdentifier": {
+              "title": "Version Identifier",
+              "edi_ref": "1056",
+              "edi_order": "2",
+              "description": "To identify a version.",
+              "type": "string",
+              "maxLength": 9
+            },
+            "revisionIdentifier": {
+              "title": "Revision Identifier",
+              "edi_ref": "1060",
+              "edi_order": "3",
+              "description": "Revision identifier.",
+              "type": "string",
+              "maxLength": 6
+            }
+          }
+        },
+        "messageFunctionCode": {
+          "title": "Message Function Code",
+          "edi_ref": "1225",
+          "edi_order": "3",
+          "description":
+            "Code indicating the function of the message. [ (1) Cancellation, (5) Replace, (9) Original ]",
+          "type": "string",
+          "maxLength": 3
+        },
+        "responseTypeCode": {
+          "title": "Response Type Code",
+          "edi_ref": "4343",
+          "edi_order": "4",
+          "description":
+            "Code specifying the type of acknowledgment required or transmitted.",
+          "type": "string",
+          "maxLength": 3
+        },
+        "documentStatusCode": {
+          "title": "Document Status Code",
+          "edi_ref": "1373",
+          "edi_order": "5",
+          "description": "Code specifying the status of a document.",
+          "type": "string",
+          "maxLength": 3
+        },
+        "languageNameCode": {
+          "title": "Language Name Code",
+          "edi_ref": "3453",
+          "edi_order": "6",
+          "description": "Code specifying the language name.",
+          "type": "string",
+          "maxLength": 3
+        }
+      }
+    }
+  }
+}

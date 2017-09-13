@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "description": "RFF segment",
+  "id": "/RFF",
+  "type": "object",
+  "properties": {
+    "RFF": {
+      "title": "Reference",
+      "edi_tag": "RFF",
+      "edi_ref": "C506",
+      "type": "object",
+      "properties": {
+        "referenceIdentifier": {
+          "title": "Reference Identifier",
+          "edi_ref": "1154",
+          "edi_order": "2",
+          "description": "Identifies a reference.",
+          "type": "string",
+          "maxLength": 70
+        },
+        "documentLineIdentifier": {
+          "title": "Document Line Identifier",
+          "edi_ref": "1156",
+          "edi_order": "3",
+          "description": "To identify a line of a document.",
+          "type": "string",
+          "maxLength": 6
+        },
+        "versionIdentifier": {
+          "title": "Version Identifier",
+          "edi_ref": "1056",
+          "edi_order": "4",
+          "description": "To identify a version.",
+          "type": "string",
+          "maxLength": 9
+        },
+        "revisionIdentifier": {
+          "title": "Revision Identifier",
+          "edi_ref": "1060",
+          "edi_order": "5",
+          "description": "To identify a revision.",
+          "type": "string",
+          "maxLength": 6
+        }
+      }
+    }
+  }
+}

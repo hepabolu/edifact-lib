@@ -12,11 +12,12 @@
     "edifact-edi-to-json": "bin/edi-to-json.js"
   },
   "engines": {
-    "node" : ">=5.5.0"
+    "node": ">=5.5.0"
   },
   "dependencies": {
     "argparse": "^1.0.2",
     "jsonschema": "1.1.0",
+    "json-schema-deref-sync": "^0.3.3",
     "lodash": "latest",
     "q": "1.4.1"
   },

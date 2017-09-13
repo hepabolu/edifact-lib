@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "description": "COM segment",
+  "id": "/COM",
+  "type": "object",
+  "properties": {
+    "COM": {
+      "title": "Communication Contact",
+      "edi_tag": "COM",
+      "edi_ref": "C076",
+      "type": "object",
+      "required": [
+        "communicationAddressIdentifier",
+        "communicationMeansTypeCode"
+      ],
+      "properties": {
+        "communicationAddressIdentifier": {
+          "title": "Communication Address Identifier",
+          "edi_ref": "3148",
+          "edi_order": "1",
+          "description": "To identify a communication address.",
+          "type": "string",
+          "maxLength": 512
+        },
+        "communicationMeansTypeCode": {
+          "title": "Communication Means Type Code",
+          "edi_ref": "3148",
+          "edi_order": "2",
+          "description":
+            "Code specifying the type of communication address. [ (AL) Cellular phone, (AM) International telephone direct line, (EM) Electronic mail, (MA) Mail ]",
+          "type": "string",
+          "maxLength": 3,
+          "enum": ["AL", "AM", "EM", "MA"]
+        }
+      }
+    }
+  }
+}

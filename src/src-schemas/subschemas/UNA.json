@@ -1,0 +1,51 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "description": "UNA segment",
+    "id": "/UNA",
+    "type": "object",
+    "properties": {
+            "UNA": {
+            "title": "Service string advice",
+            "edi_tag": "UNA",
+            "type": "object",
+            "properties": {
+                "componentDataElementSeparator": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1,
+                    "default": ":"
+                },
+                "dataElementSeparator": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1,
+                    "default": "+"
+                },                
+                "decimalNotation": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1,
+                    "default": "."
+                },
+                "releaseCharacter": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1,
+                    "default": "?"
+                },
+                "reserved": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1,
+                    "default": " "
+                },
+                "segmentSeparator": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1,
+                    "default": "'"
+                }
+            }
+        }
+    }
+}

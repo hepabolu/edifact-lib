@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "description": "UNZ segment",
+  "id": "/UNZ",
+  "type": "object",
+  "properties": {
+    "UNZ": {
+      "title": "Interchange Trailer",
+      "edi_tag": "UNZ",
+      "type": "object",
+      "required": ["interchangeControlReference"],
+      "properties": {
+        "interchangeControlCount": {
+          "title": "Interchange Control Count",
+          "edi_ref": "0036",
+          "edi_order": "1",
+          "description":
+            "Count either of the number of messages or, if used, of the number of functional groups in an interchange.",
+          "type": "integer",
+          "maximum": 1,
+          "minimum": 1
+        },
+        "interchangeControlReference": {
+          "title": "Interchange Control Reference",
+          "edi_ref": "0020",
+          "edi_order": "2",
+          "description":
+            "Unique reference assigned by the sender to an interchange.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 14
+        }
+      }
+    }
+  }
+}

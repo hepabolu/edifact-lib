@@ -1,0 +1,65 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "description": "FTX segment",
+    "id": "/FTX",
+    "type": "object",
+    "properties": {
+        "FTX": {
+            "title": "Free text",
+            "description": "De inhoud van het bericht",
+            "edi_tag": "FTX",
+            "type": "object",
+            "properties": {
+                "qualifier": {
+                    "title": "text subject qualifier",
+                    "edi_ref": "4451",
+                    "edi_order": 1,
+                    "type": "string",
+                    "maxLength": 3,
+                    "enum": [
+                        "GRM"
+                    ]
+                },
+                "function": {
+                    "title": "Text function, coded",
+                    "edi_ref": "4453",
+                    "edi_order": 2,
+                    "type": "string",
+                    "maxLength": 3,
+                    "enum": [
+                        "1",
+                        "2",
+                        "3"
+                    ]
+                },
+                "reference": {
+                    "title": "Text reference",
+                    "description": "niet gebruiken",
+                    "edi_ref": "C107",
+                    "edi_order": 3,
+                    "type": "object",
+                    "properties": {
+                        "dummy": {
+                            "edi_ref": "4441",
+                            "type": "string"
+                        }
+                    }
+                },
+                "regel": {
+                    "title": "Text literal",
+                    "edi_ref": "C108",
+                    "type": "object",
+                    "properties": {
+                        "freetext": {
+                            "title": "verslag in vrije tekst",
+                            "edi_ref": "4440",
+                            "type": "string",
+                            "maxLength": 70                            
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+}

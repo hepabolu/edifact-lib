@@ -1,0 +1,126 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "description": "PID segment",
+    "id": "/PID",
+    "type": "object",
+    "properties": {
+            "PID": {
+            "title": "Person identification",
+            "edi_tag": "PID",
+            "type": "object",
+            "properties": {
+                "qualifier": {
+                    "title": "party qualifier",
+                    "edi_ref": "3035",
+                    "edi_order": 1,
+                    "type": "string",
+                    "maxLength": 3,
+                    "enum": [
+                        "PAT"
+                    ]
+                },
+                "identification": {
+                    "title": "party identification",
+                    "edi_ref": "C082",
+                    "edi_order": 2,
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "title": "party identification, coded",
+                            "edi_ref": "3039",
+                            "edi_order": 1,
+                            "type": "string",
+                            "maxLength": 17
+                        },
+                        "qualifier": {
+                            "title": "code list qualifier",
+                            "edi_ref": "1131",
+                            "edi_order": 2,
+                            "type": "string",
+                            "maxLength": 3,
+                            "enum": [
+                                "CMS",
+                                "PCL"
+                            ]
+                        },
+                        "agency": {
+                            "title": "code list resp. agency, coded",
+                            "edi_ref": "3055",
+                            "edi_order": 3,
+                            "type": "string",
+                            "maxLength": 3,
+                            "enum": [
+                                "VEK",
+                                "LOC"
+                            ]
+                        }
+                    }
+                },
+                "personName": {
+                    "title": "Person Name",
+                    "edi_ref": "C_HC05",
+                    "edi_order": 3,
+                    "type": "object",
+                    "properties": {
+                        "qualifier": {
+                            "title": "Name format qualifier",
+                            "edi_ref": "H009",
+                            "edi_order": 1,
+                            "type": "string",
+                            "maxLength": 3
+                        },
+                        "achternaam": {
+                            "title": "achternaam",
+                            "edi_ref": "H011",
+                            "edi_order": 2,
+                            "type": "string",
+                            "maxLength": 35
+                        },
+                        "voorletters": {
+                            "title": "voorletters",
+                            "edi_ref": "H011",
+                            "edi_order": 3,
+                            "type": "string",
+                            "maxLength": 35
+                        },
+                        "voorvoegsels": {
+                            "title": "voorvoegsels",
+                            "edi_ref": "H011",
+                            "edi_order": 4,
+                            "type": "string",
+                            "maxLength": 35
+                        },
+                        "eersteVoornaam": {
+                            "title": "eersteVoornaam",
+                            "edi_ref": "H011",
+                            "edi_order": 5,
+                            "type": "string",
+                            "maxLength": 35
+                        },
+                        "achternaamEchtgenoot": {
+                            "title": "achternaamEchtgenoot",
+                            "edi_ref": "H011",
+                            "edi_order": 6,
+                            "type": "string",
+                            "maxLength": 35
+                        },
+                        "voorvoegselsEchtenoot": {
+                            "title": "voorvoegselsEchtenoot",
+                            "edi_ref": "H011",
+                            "edi_order": 7,
+                            "type": "string",
+                            "maxLength": 35
+                        }
+                    }
+                },
+                "geslacht": {
+                    "title": "geslacht (1) = man, (2) = vrouw",
+                    "edi_ref": "HC06",
+                    "edi_order": 4,
+                    "type": "string",
+                    "maxLength": 3
+                }
+            }
+        }
+    }
+}

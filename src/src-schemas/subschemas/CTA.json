@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "description": "CTA segment",
+  "id": "/CTA",
+  "type": "object",
+  "properties": {
+    "CTA": {
+      "title": "Contact Information",
+      "edi_tag": "CTA",
+      "type": "object",
+      "properties": {
+        "contactDetails": {
+          "title": "Contact Details",
+          "edi_ref": "C056",
+          "edi_order": "2",
+          "description":
+            "Code and/or name of a contact such as a department or employee. Code preferred.",
+          "type": "object",
+          "properties": {
+            "contactIdentifier": {
+              "title": "Contact Identifier",
+              "edi_ref": "3413",
+              "edi_order": "1",
+              "description":
+                "To identify a contact, such as a department or employee.",
+              "type": "string",
+              "maxLength": 17
+            },
+            "contactName": {
+              "title": "Contact Name",
+              "edi_ref": "3412",
+              "edi_order": "2",
+              "description":
+                "Name of a contact, such as a department or employee.",
+              "type": "string",
+              "maxLength": 256
+            }
+          }
+        }
+      }
+    }
+  }
+}
