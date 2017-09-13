@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "description": "DTM segment",
+  "id": "/DTM",
+  "type": "object",
+  "properties": {
+    "DTM": {
+      "title": "Datetime",
+      "description":
+        "Date and/or time, or period relevant to the specified date/time/period type.",
+      "edi_tag": "DTM",
+      "edi_ref": "C507",
+      "type": "object",
+      "properties": {
+        "text": {
+          "title": "Text",
+          "edi_ref": "2380",
+          "edi_order": "2",
+          "description":
+            "The value of a date, a date and time, a time or of a period in a specified representation.",
+          "type": "string",
+          "maxLength": 35
+        },
+        "format": {
+          "title": "Format Code",
+          "edi_ref": "2379",
+          "edi_order": "3",
+          "description":
+            "Code specifying the representation of a date, time or period. [ (203) CCYYMMDDHHMM, (303) CCYYMMDDHHMMZZZ ]",
+          "type": "string",
+          "maxLength": 3
+        }
+      }
+    }
+  }
+}

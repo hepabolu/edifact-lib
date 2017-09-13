@@ -6,10 +6,8 @@ var path = require('path');
 var _ = require('lodash');
 var Edi = require('../../lib/edi');
 
-var _require = require("../../lib/edi-errors.js");
-
-var JsonSchemaValidationError = _require.JsonSchemaValidationError;
-
+var _require = require("../../lib/edi-errors.js"),
+    JsonSchemaValidationError = _require.JsonSchemaValidationError;
 
 suite('Segment Reader', function () {
   var ediConfig, input;
@@ -57,6 +55,13 @@ suite('Segment Reader', function () {
 
   test('should allow escape char to be escaped', function () {
     var input = "BGM+ABC:Some?:doc?+code??:BCD:Some Name+di-1234:1.0.1:234+9+CBA+dsc+eng";
+    var reader = new Edi.EdiSegmentReader(input, ediConfig);
+    var expected = ['ABC', 'Some:doc+code?', 'BCD', 'Some Name'];
+    assert.deepEqual(reader.currentDataElement(), expected);
+  });
+
+  test('should allow escape char to be escaped with an UNA segment', function () {
+    var input = "UNA:+.? 'BGM+ABC:Some?:doc?+code??:BCD:Some Name+di-1234:1.0.1:234+9+CBA+dsc+eng";
     var reader = new Edi.EdiSegmentReader(input, ediConfig);
     var expected = ['ABC', 'Some:doc+code?', 'BCD', 'Some Name'];
     assert.deepEqual(reader.currentDataElement(), expected);

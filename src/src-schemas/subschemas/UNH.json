@@ -1,0 +1,91 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "description": "UNH segment",
+    "id": "/UNH",
+    "type": "object",
+    "properties": {
+        "UNH": {
+            "title": "Message Header",
+            "edi_tag": "UNH",
+            "type": "object",
+            "required": [
+                "messageReferenceNumber",
+                "messageIdentifier"
+            ],
+            "properties": {
+                "messageReferenceNumber": {
+                    "title": "Message Reference Number",
+                    "edi_ref": "0062",
+                    "edi_order": "1",
+                    "description": "Unique message reference assigned by the sender",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 14
+                },
+                "messageIdentifier": {
+                    "title": "Message Identifier",
+                    "edi_ref": "S009",
+                    "edi_order": "2",
+                    "description": "Identification of the type, version etc. of the message being interchanged",
+                    "type": "object",
+                    "required": [
+                        "messageTypeIdentifier",
+                        "messageTypeVersionNumber"
+                    ],
+                    "properties": {
+                        "messageTypeIdentifier": {
+                            "title": "Message Type Identifier",
+                            "edi_ref": "0065",
+                            "edi_order": "1",
+                            "description": "Code identifying a type of message and assigned by its controlling agency.",
+                            "type": "string",
+                            "enum": [
+                                "MEDVRI",
+                                "MEDSPE"
+                            ],
+                            "default": "MEDVRI",
+                            "maxLength": 6
+                        },
+                        "messageTypeVersionNumber": {
+                            "title": "Message Type Version Number",
+                            "edi_ref": "0052",
+                            "edi_order": "2",
+                            "description": "Version number of a message type.",
+                            "type": "string",
+                            "default": "1",
+                            "maxLength": 3
+                        },
+                        "messageTypeReleaseNumber": {
+                            "title": "Message Type Version Number",
+                            "edi_ref": "0054",
+                            "edi_order": "3",
+                            "description": "911: Edifact 91/1 directory",
+                            "type": "string",
+                            "default": "1",
+                            "maxLength": 3
+                        },
+                        "messageControllingAgency": {
+                            "title": "Controlling Agency",
+                            "edi_ref": "0051",
+                            "edi_order": "3",
+                            "description": "IT: ITN-zorginhoudelijke",
+                            "type": "string",
+                            "default": "1",
+                            "maxLength": 3
+                        },
+                        "messageAssociationAssignedCode": {
+                            "title": "Association assigned code",
+                            "edi_ref": "0057",
+                            "edi_order": "3",
+                            "description": "(SPE31) specialistenbrief versie 3.1",
+                            "type": "string",
+                            "default": "1",
+                            "maxLength": 6
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+}

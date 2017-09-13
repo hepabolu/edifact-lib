@@ -58,6 +58,13 @@ suite('Segment Reader', function() {
     assert.deepEqual(reader.currentDataElement(), expected);
   });
 
+  test('should allow escape char to be escaped with an UNA segment', function() {
+    var input = "UNA:+.? 'BGM+ABC:Some?:doc?+code??:BCD:Some Name+di-1234:1.0.1:234+9+CBA+dsc+eng";
+    let reader = new Edi.EdiSegmentReader(input, ediConfig);
+    var expected = [ 'ABC', 'Some:doc+code?', 'BCD', 'Some Name' ];
+    assert.deepEqual(reader.currentDataElement(), expected);
+  });
+
   test('should allow escaped data components', function() {
     let reader = new Edi.EdiSegmentReader(input, ediConfig);
     let actual = reader.current();

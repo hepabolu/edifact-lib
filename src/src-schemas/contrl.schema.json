@@ -1,0 +1,269 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "CONTRL specification",
+  "type": "object",
+  "required": [
+    "interchangeHeader",
+    "messageHeader",
+    "interchangeResponse",
+    "messageTrailer"
+  ],
+  "properties": {
+    "interchangeHeader": {
+      "edi_order": 1,
+      "$ref": "UNB.json#/properties/UNB"
+    },
+    "messageHeader": {
+      "edi_order": 2,
+      "$ref": "UNH.json#/properties/UNH"
+    },
+    "interchangeResponse": {
+      "edi_order": 2,
+      "$ref": "#/definitions/UCI"
+    },
+    "messageResponses": {
+      "edi_order": 3,
+      "type": "array",
+      "title": "Message Responses",
+      "description":
+        "A group of segments to specify the a response for each original messages",
+      "minItems": 1,
+      "maxItems": 9999,
+      "items": {
+        "edi_order": 1,
+        "$ref": "#/definitions/UCM"
+      }
+    },
+    "messageTrailer": {
+      "edi_order": 100,
+      "$ref": "UNT.json#/properties/UNT"
+    }
+  },
+  "definitions": {
+    "UCI": {
+      "title": "Reply of Interchange",
+      "edi_tag": "UCI",
+      "type": "object",
+      "properties": {
+        "interchangeReferenceNumber": {
+          "edi_ref": "0020",
+          "edi_order": "1",
+          "title": "Interchange reference number",
+          "description": "Unique reference of original interchange.",
+          "type": "string",
+          "maxLength": 14,
+          "required": true
+        },
+        "interchangeSender": {
+          "edi_ref": "S002",
+          "edi_order": "2",
+          "title": "Interchange Sender",
+          "description": "Identification of the sender of the interchange.",
+          "type": "object",
+          "required": true,
+          "properties": {
+            "senderIdentification": {
+              "edi_ref": "0004",
+              "edi_order": "1",
+              "title": "Sender Identification",
+              "description":
+                "Name or coded representation of the sender of a data interchange.",
+              "type": "string",
+              "required": true,
+              "maxLength": 35
+            },
+            "identificationQualifierCode": {
+              "title": "Identification Qualifier Code",
+              "edi_ref": "0007",
+              "edi_order": "2",
+              "description":
+                "Qualifier referring to the source of codes for the identifiers of inrechanging partners.",
+              "type": "string",
+              "maxLength": 4
+            },
+            "internalSubAddress": {
+              "title": "Internal Sub Address",
+              "edi_ref": "0014",
+              "edi_order": "3",
+              "description": "Internal Sub Address.",
+              "type": "string",
+              "maxLength": 14
+            }
+          }
+        },
+        "interchangeRecipient": {
+          "edi_ref": "S003",
+          "edi_order": "3",
+          "title": "Interchange Recipient",
+          "description": "Identification of the recipient of the interchange.",
+          "type": "object",
+          "required": true,
+          "properties": {
+            "recipientIdentification": {
+              "edi_ref": "0010",
+              "edi_order": "1",
+              "title": "Recipient Identification",
+              "description":
+                "Name or coded identification of the recipient of a data interchange.",
+              "type": "string",
+              "required": true,
+              "maxLength": 35
+            },
+            "identificationQualifierCode": {
+              "edi_ref": "0007",
+              "edi_order": "2",
+              "title": "Identification Qualifier Code",
+              "description":
+                "Qualifier referring to the source of codes for the identifiers of inrechanging partners.",
+              "type": "string",
+              "maxLength": 4
+            },
+            "internalSubAddress": {
+              "edi_ref": "0014",
+              "edi_order": "3",
+              "title": "Internal Sub Address",
+              "description": "Internal Sub Address.",
+              "type": "string",
+              "maxLength": 14
+            }
+          }
+        },
+        "statusCode": {
+          "title": "Status Code",
+          "edi_ref": "0083",
+          "edi_order": "4",
+          "description":
+            "Status for the interchange received: 4 = Entire interchange is rejected, 7 = Interchange is accepted, 8 = Interchange is received and error given.",
+          "type": "string",
+          "maxLength": 3,
+          "required": true
+        },
+        "errorCode": {
+          "title": "Error Code",
+          "edi_ref": "0085",
+          "edi_order": "5",
+          "description":
+            "Error Code (only if 'statusCode' = 8). 2 = Syntax and/or syntax version specified in the UNB segment cannot be received.",
+          "type": "string",
+          "maxLength": 3
+        },
+        "segmentName": {
+          "title": "Segment Name",
+          "edi_ref": "0013",
+          "edi_order": "6",
+          "description": "Name of the referenced segment.",
+          "type": "string",
+          "pattern": "/^[A-Za-z]{3,3}$"
+        }
+      }
+    },
+    "UCM": {
+      "title": "Message Response",
+      "edi_tag": "UCM",
+      "type": "object",
+      "description":
+        "To identify a message in the subject interchange, and to indicate that message's acknowledgement or rejection (action taken), and to identify any error related to the UNH and UNT segments. This segment will only occur if a message error(s) is detected as listed in data element 0085.  It will be used once for each error found.",
+      "properties": {
+        "messageReferenceNumber": {
+          "edi_ref": "0062",
+          "edi_order": "1",
+          "title": "Message reference number",
+          "description":
+            "Unique reference of original message. Sender's Message Reference as received in the UNH segment of the incoming message.",
+          "type": "string",
+          "maxLength": 14,
+          "required": true
+        },
+        "messageIdentifier": {
+          "edi_ref": "S009",
+          "edi_order": "2",
+          "title": "Message Identifier",
+          "description":
+            "Identification of the type, version etc. of the message being interchanged.",
+          "type": "object",
+          "required": true,
+          "properties": {
+            "messageTypeIdentifier": {
+              "edi_ref": "0065",
+              "edi_order": "1",
+              "title": "Message Type Identifier",
+              "description":
+                "Code identifying a type of message and assigned by its controlling agency.",
+              "type": "string",
+              "required": true,
+              "maxLength": 6,
+              "minLength": 6
+            },
+            "messageTypeVersionNumber": {
+              "title": "Message Type Version Number",
+              "edi_ref": "0052",
+              "edi_order": "2",
+              "description": "Version number of a message type.",
+              "required": true,
+              "type": "string",
+              "maxLength": 3
+            },
+            "messageTypeReleaseNumber": {
+              "title": "Message Type Release Number",
+              "edi_ref": "0054",
+              "edi_order": "3",
+              "description":
+                "Release number within the current message type version number.",
+              "required": true,
+              "type": "string",
+              "maxLength": 3
+            },
+            "controllingAgency": {
+              "title": "Controlling Agency",
+              "edi_ref": "0051",
+              "edi_order": "4",
+              "description":
+                "Code identifying the agency controlling the specification, maintenance and publication of the message type.",
+              "required": true,
+              "type": "string",
+              "maxLength": 2,
+              "enum": ["UN"],
+              "default": "UN"
+            },
+            "associationAssignedCode": {
+              "title": "Association Assigned Code",
+              "edi_ref": "0057",
+              "edi_order": "3",
+              "description":
+                "Code, assigned by the association responsible for the design and maintenance of the message type concerned, which further identifies the message.",
+              "type": "string",
+              "maxLength": 6
+            }
+          }
+        },
+        "statusCode": {
+          "title": "Status Code",
+          "edi_ref": "0083",
+          "edi_order": "4",
+          "description":
+            "Status for the interchange received: 4 = Entire interchange is rejected, 7 = Interchange is accepted, 8 = Interchange is received and error given.",
+          "type": "string",
+          "maxLength": 3,
+          "required": true
+        },
+        "errorCode": {
+          "title": "Error Code",
+          "edi_ref": "0085",
+          "edi_order": "5",
+          "description":
+            "Error Code (only if 'statusCode' = 8). 2 = Syntax and/or syntax version specified in the UNB segment cannot be received.",
+          "type": "string",
+          "maxLength": 3
+        },
+        "segmentName": {
+          "title": "Segment Name",
+          "edi_ref": "0013",
+          "edi_order": "6",
+          "description": "Name of the referenced segment.",
+          "type": "string",
+          "pattern": "/^[A-Za-z]{3,3}$"
+        }
+      }
+    }
+  }
+}

@@ -216,26 +216,43 @@ class EdiSegmentGroup extends EdiBase {
   }
 
   parse(reader) {
-    var current, segs;
-
+    var current, segs, nest_order;
+    
     //continue in the captcha group until no more matches)
-    while(reader.current() && reader.current().tag === this.config.groupTag) {
+    // allow for explicit nesting numbers
+    while (reader.current() && _.startsWith(reader.current().tag, this.config.groupTag))  {
+      if (reader.current().tag !== this.config.groupTag) {
+        // explicit nesting, for now we assume only one level
+        nest_order = reader.current().tag.match(/.{4}(.*)/)[1];
+      }
+
       segs = segs || [];
       var val = {};
 
+      if (nest_order) {
+        segs[nest_order] = segs[nest_order] || {};
+      }
       for (let i = 0; i < this.items.length; i++) {
         var dVal = this.items[i].parse(reader);
-        if(dVal) {
+        if (dVal) {
           val[this.items[i].name] = dVal;
         }
-
       }
-
-      if(!_.isEmpty(val)) {
-        segs.push(val);
+    
+      if (!_.isEmpty(val)) {
+        if (nest_order) {
+          segs[nest_order] = val;
+        }
+        else {
+          segs.push(val);
+        }
       } else {
         reader.next();
       }
+    }
+
+    if (nest_order && segs[0] === undefined) {
+      segs.shift();
     }
 
     return segs
@@ -401,7 +418,22 @@ class EdiSegmentReader {
   }
 
   initSegments(input) {
+    let serviceAdvice = this.getServiceAdvice(input);
+    if (serviceAdvice) {
+        this.config.dataElementSeparator = serviceAdvice.dataElementSeparator;
+        this.config.dataComponentSeparator = serviceAdvice.dataComponentSeparator;
+        this.config.decimalNotation = serviceAdvice.decimalNotation;
+        this.config.releaseCharacter = serviceAdvice.releaseCharacter;
+        this.config.segmentSeparator = serviceAdvice.segmentSeparator;
+  }
+
     let items = this.regexSplitter(input, this.config.segmentSeparator, this.config.releaseCharacter);
+
+    if (serviceAdvice) {
+      // remove the first line to avoid recurrence
+      items.shift();
+    }
+
     let segments = [];
     for(var i = 0; i < items.length; i++) {
       var dataElms = this.regexSplitter(items[i], this.config.dataElementSeparator, this.config.releaseCharacter);
@@ -425,6 +457,20 @@ class EdiSegmentReader {
     }
 
     return segments;
+  }
+
+  getServiceAdvice(input) {
+    let serviceAdvice = undefined;
+
+    if (input.substring(0,3) === 'UNA') {
+        serviceAdvice = {};
+        serviceAdvice.dataComponentSeparator = input.charAt(3);
+        serviceAdvice.dataElementSeparator = input.charAt(4);
+        serviceAdvice.decimalNotation = input.charAt(5);
+        serviceAdvice.releaseCharacter = input.charAt(6);
+        serviceAdvice.segmentSeparator = input.charAt(8);
+    }
+    return serviceAdvice;
   }
 
   regexSplitter(input, split, esc) {

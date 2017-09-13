@@ -1,0 +1,282 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "description": "NAD segment",
+  "id": "/NAD",
+  "type": "object",
+  "properties": {
+    "NAD": {
+      "title": "Name and Address",
+      "edi_tag": "NAD",
+      "type": "object",
+      "properties": {
+        "partyIdentificationDetails": {
+          "title": "Party Identification Details",
+          "edi_ref": "C082",
+          "edi_order": "2",
+          "description": "Identification of a transaction party by code.",
+          "type": "object",
+          "required": ["partyIdentifier"],
+          "properties": {
+            "partyIdentifier": {
+              "title": "Party Identifier",
+              "edi_ref": "3039",
+              "edi_order": "1",
+              "description": "Code specifying the identity of a party.",
+              "type": "string",
+              "maxLength": 35
+            },
+            "codeListIdentificationCode": {
+              "title": "Code List Identification Code",
+              "edi_ref": "1131",
+              "edi_order": "2",
+              "description":
+                "Code identifying a user or association maintained code list.",
+              "type": "string",
+              "maxLength": 17
+            },
+            "codeListResponsibleAgencyCode": {
+              "title": "Code List Responsible Agency Code",
+              "edi_ref": "3055",
+              "edi_order": "3",
+              "description":
+                "Code specifying the agency responsible for a code list.",
+              "type": "string",
+              "maxLength": 3
+            }
+          }
+        },
+        "address": {
+          "title": "Address",
+          "edi_ref": "C058",
+          "edi_order": "3",
+          "description": "Unstructured name and address: one to five lines",
+          "type": "object",
+          "required": ["address1"],
+          "properties": {
+            "address1": {
+              "title": "Address 1",
+              "edi_ref": "3124",
+              "edi_order": "1",
+              "description":
+                "Free form description of a name and address line.",
+              "type": "string",
+              "maxLength": 35
+            },
+            "address2": {
+              "title": "Address 2",
+              "edi_ref": "3124",
+              "edi_order": "2",
+              "description":
+                "Free form description of a name and address line.",
+              "type": "string",
+              "maxLength": 35
+            },
+            "address3": {
+              "title": "Address 3",
+              "edi_ref": "3124",
+              "edi_order": "3",
+              "description":
+                "Free form description of a name and address line.",
+              "type": "string",
+              "maxLength": 35
+            },
+            "address4": {
+              "title": "Address 4",
+              "edi_ref": "3124",
+              "edi_order": "4",
+              "description":
+                "Free form description of a name and address line.",
+              "type": "string",
+              "maxLength": 35
+            },
+            "address5": {
+              "title": "Address 5",
+              "edi_ref": "3124",
+              "edi_order": "5",
+              "description":
+                "Free form description of a name and address line.",
+              "type": "string",
+              "maxLength": 35
+            }
+          }
+        },
+        "partyName": {
+          "title": "Party Name",
+          "edi_ref": "C080",
+          "edi_order": "4",
+          "description":
+            "Identification of a transaction party by name, one to five lines. Party name may be formatted.",
+          "type": "object",
+          "required": ["partyName1"],
+
+          "properties": {
+            "partyName1": {
+              "title": "Party Name 1",
+              "edi_ref": "3036",
+              "edi_order": "1",
+              "description": "Name of a party.",
+              "type": "string",
+              "maxLength": 70
+            },
+            "partyName2": {
+              "title": "Party Name 2",
+              "edi_ref": "3036",
+              "edi_order": "2",
+              "description": "Name of a party.",
+              "type": "string",
+              "maxLength": 70
+            },
+            "partyName3": {
+              "title": "Party Name 3",
+              "edi_ref": "3036",
+              "edi_order": "3",
+              "description": "Name of a party.",
+              "type": "string",
+              "maxLength": 70
+            },
+            "partyName4": {
+              "title": "Party Name 4",
+              "edi_ref": "3036",
+              "edi_order": "4",
+              "description": "Name of a party.",
+              "type": "string",
+              "maxLength": 70
+            },
+            "partyName5": {
+              "title": "Party Name 5",
+              "edi_ref": "3036",
+              "edi_order": "5",
+              "description": "Name of a party.",
+              "type": "string",
+              "maxLength": 70
+            },
+            "partyNameFormatCode": {
+              "title": "Party Name Format Code",
+              "edi_ref": "3045",
+              "edi_order": "5",
+              "description":
+                "Code specifying the representation of a party name. Refer to D.13B Data Element Dictionary for acceptable code values.",
+              "type": "string",
+              "maxLength": 3
+            }
+          }
+        },
+        "street": {
+          "title": "Street",
+          "edi_ref": "C059",
+          "edi_order": "5",
+          "description":
+            "Street address and/or PO Box number in a structured address: one to four lines.",
+          "type": "object",
+          "required": ["street1"],
+
+          "properties": {
+            "street1": {
+              "title": "Street 1",
+              "edi_ref": "3042",
+              "edi_order": "1",
+              "description": "Street and number or post office box identifier",
+              "type": "string",
+              "maxLength": 35
+            },
+            "street2": {
+              "title": "Street 2",
+              "edi_ref": "3042",
+              "edi_order": "2",
+              "description": "Street and number or post office box identifier",
+              "type": "string",
+              "maxLength": 35
+            },
+            "street3": {
+              "title": "Street 3",
+              "edi_ref": "3042",
+              "edi_order": "3",
+              "description": "Street and number or post office box identifier",
+              "type": "string",
+              "maxLength": 35
+            },
+            "street4": {
+              "title": "Street 4",
+              "edi_ref": "3042",
+              "edi_order": "4",
+              "description": "Street and number or post office box identifier",
+              "type": "string",
+              "maxLength": 35
+            }
+          }
+        },
+        "cityName": {
+          "title": "City Name",
+          "edi_ref": "3164",
+          "edi_order": "6",
+          "description": "Name of a city.",
+          "type": "string",
+          "maxLength": 35
+        },
+        "countrySubdivisionDetails": {
+          "title": "Country Subdivision Details",
+          "edi_ref": "C819",
+          "edi_order": "7",
+          "description":
+            "To specify a country subdivision, such as state, canton, county, prefecture.",
+          "type": "object",
+          "properties": {
+            "countrySubdivisionIdentifier": {
+              "title": "Country Subdivision Identifier",
+              "edi_ref": "3229",
+              "edi_order": "1",
+              "description":
+                "To identify a country subdivision, such as state, canton, county, prefecture.",
+              "type": "string",
+              "maxLength": 9
+            },
+            "codeListIdentificationCode": {
+              "title": "Code List Identification Code",
+              "edi_ref": "1131",
+              "edi_order": "2",
+              "description":
+                "Code identifying a user or association maintained code list.",
+              "type": "string",
+              "maxLength": 17
+            },
+            "codeListResponsibleAgencyCode": {
+              "title": "Code List Responsible Agency Code",
+              "edi_ref": "3055",
+              "edi_order": "3",
+              "description":
+                "Code specifying the agency responsible for a code list. Refer to D.13B Data Element Dictionary for acceptable code values.",
+              "type": "string",
+              "maxLength": 3
+            },
+            "countrySubdivisionName": {
+              "title": "Country Subdivision Name",
+              "edi_ref": "3228",
+              "edi_order": "4",
+              "description":
+                "Name of a country subdivision, such as state, canton, county, prefecture.",
+              "type": "string",
+              "maxLength": 70
+            }
+          }
+        },
+        "postalIdentificationCode": {
+          "title": "Postal Identification Code",
+          "edi_ref": "3251",
+          "edi_order": "8",
+          "description": "Code specifying the postal zone or address.",
+          "type": "string",
+          "maxLength": 17
+        },
+        "countryIdentifier": {
+          "title": "Country Identifier",
+          "edi_ref": "3207",
+          "edi_order": "9",
+          "description":
+            "Identification of the name of the country or other geographical entity as defined in ISO 3166-1 and UN/ECE Recommendation 3.",
+          "type": "string",
+          "maxLength": 3
+        }
+      }
+    }
+  }
+}

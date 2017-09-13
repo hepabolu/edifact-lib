@@ -1,0 +1,18 @@
+[
+   {},
+   {},
+   { "text": "First line after 2 empty lines" },
+   { "text": "Second line" },
+   { "text": "Third line" },
+   {},
+   { "text": "Two more lines1" },
+   { "text": "Two more lines2" },
+   {},
+   {},
+   { "text": "Single line between empty lines" },
+   {},
+   { "text": "Line1" },
+   { "text": "Line2" },
+   { "text": "Line3" }
+]
+

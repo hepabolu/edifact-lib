@@ -80,6 +80,22 @@ suite('Edi Components', function() {
       });
     });
 
+    suite('Explicit Nested Segments', function() {
+      setup(function() {
+        seg = new Edi.EdiSegmentGroup("explicit_nesting", jsonSchema.properties.explicit_nesting);
+      });
+
+      test('should parse segments', function() {
+        var input = fs.readFileSync(path.resolve(process.env.PWD, "src/test/from-edi/fixtures/explicit-nesting-input.edi"), 'utf8');
+
+        var reader = new Edi.EdiSegmentReader(input, ediConfig);
+        var expected = JSON.parse(fs.readFileSync(path.resolve(process.env.PWD, "src/test/from-edi/fixtures/explicit-nesting-parse-success.json"), 'utf8'));
+
+        var actual = seg.parse(reader, ediConfig);
+        assert.deepEqual(actual, expected);
+      });
+    });
+
   });
 
   suite('EdiSegment', function() {
