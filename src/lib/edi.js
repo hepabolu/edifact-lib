@@ -493,10 +493,15 @@ class EdiSegmentReader {
     }
 
     //cleanup escape characters and trim
-    for(var i = 0; i < output.length; i++) {
-      output[i] = output[i].replace(esc + split, split).trim();
-    }
+    let re = new RegExp('\\' + esc + '([' + split + '])', 'g');
 
+    for (var i = 0; i < output.length; i++) {
+      if (split !== this.config.dataComponentSeparator) {
+        output[i] = output[i].replace(esc + split, split).trim();
+      } else {
+        output[i] = output[i].replace(re, '$1').trim();
+      }
+    }
     return output;
   }
 
