@@ -75,13 +75,12 @@ suite('Segment Reader', function() {
 
   test('should allow multiple escaped chars', function() {
     var input =
-      "FOO+bar?:123 and another?:567:foo?:456 and more ????:bar ?+ baz'";
+      "FOO+bar?:123 and another?:567:foo?:456 and?' more ????:bar ?+ baz'";
 
     var reader = new Edi.EdiSegmentReader(input, ediConfig);
     let actual = reader.current();
     var expected = [
-      ['bar:123 and another:567', 'foo:456 and more ???', 'bar + baz'],
-    ];
+      ['bar:123 and another:567', "foo:456 and' more ???", 'bar + baz'] ];
 
     assert.deepEqual(actual.dataElements, expected);
   });
