@@ -6,7 +6,7 @@
     "properties": {
         "FTX": {
             "title": "Free text",
-            "description": "De inhoud van het bericht",
+            "description": "To provide free form or coded text information.",
             "edi_tag": "FTX",
             "type": "object",
             "properties": {
@@ -34,7 +34,6 @@
                 },
                 "reference": {
                     "title": "Text reference",
-                    "description": "niet gebruiken",
                     "edi_ref": "C107",
                     "edi_order": 3,
                     "type": "object",
@@ -45,13 +44,13 @@
                         }
                     }
                 },
-                "regel": {
+                "literal": {
                     "title": "Text literal",
                     "edi_ref": "C108",
                     "type": "object",
                     "properties": {
-                        "freetext": {
-                            "title": "verslag in vrije tekst",
+                        "value": {
+                            "title": "free text value",
                             "edi_ref": "4440",
                             "type": "string",
                             "maxLength": 70                            
