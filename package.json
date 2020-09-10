@@ -3,7 +3,8 @@
   "version": "0.0.5",
   "description": "EDIFACT Helper to convert EDIFACT to and from JSON",
   "scripts": {
-    "test": "NODE_ENV=test mocha -R spec"
+    "test": "NODE_ENV=test mocha -R spec",
+    "build:schemas": "node /buildschemas.js"
   },
   "author": "Jono <jono-tt@users.noreply.github.com>",
   "license": "BSD",
